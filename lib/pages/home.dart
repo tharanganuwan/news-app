@@ -6,6 +6,7 @@ import 'package:cybehawks/models/news.dart';
 import 'package:cybehawks/pages/add_poll_screen.dart';
 import 'package:cybehawks/pages/add_post_screen.dart';
 import 'package:cybehawks/pages/login.dart';
+import 'package:cybehawks/pages/polls/create_polls.dart';
 import 'package:cybehawks/pages/profile.dart';
 import 'package:cybehawks/pages/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -137,7 +138,7 @@ class _HomeState extends State<Home> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (_) => const AddPollScreen()));
+                                      builder: (_) => const CreatePoll()));
                             },
                             child: Text("Polls"),
                             style: ElevatedButton.styleFrom(
