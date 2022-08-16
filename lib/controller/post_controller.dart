@@ -9,6 +9,75 @@ import 'package:http/http.dart' as http;
 import 'package:xml/xml.dart' as xml;
 
 class PostController extends ChangeNotifier {
+  TextEditingController _questionController = TextEditingController();
+  TextEditingController _ans1Controller = TextEditingController();
+  TextEditingController _ans2Controller = TextEditingController();
+  TextEditingController _ans3Controller = TextEditingController();
+  TextEditingController _ans4Controller = TextEditingController();
+  DateTime _p_date = DateTime.now();
+
+  TextEditingController get questionController => _questionController;
+  TextEditingController get ans1Controller => _ans1Controller;
+  TextEditingController get ans2Controller => _ans2Controller;
+  TextEditingController get ans3Controller => _ans3Controller;
+  TextEditingController get ans4Controller => _ans4Controller;
+  DateTime get p_date => _p_date;
+  void setdate(DateTime d) {
+    _p_date = d;
+  }
+
+  bool pollvalidate() {
+    bool validate = false;
+    if (_questionController.text.isEmpty ||
+        _ans1Controller.text.isEmpty ||
+        _ans2Controller.text.isEmpty ||
+        _ans3Controller.text.isEmpty ||
+        _ans4Controller.text.isEmpty) {
+      validate = false;
+    } else {
+      validate = true;
+    }
+    return validate;
+  }
+
+  News? toPostpoll;
+  // List<News>? _allpost;
+  // List<News>? get allpost => _allpost;
+
+  void postPoll() async {
+    final docpolls = _firestore.collection('news').doc();
+    final toPostpoll = News(
+      id: docpolls.id,
+      p_question: _questionController.text,
+      p_enddate: _p_date,
+      p_ispoll: "yes",
+      answer_ids: [],
+      answer_texts: [
+        _ans1Controller.text,
+        _ans2Controller.text,
+        _ans3Controller.text,
+        _ans4Controller.text,
+      ],
+      answer1_votes: [],
+      answer2_votes: [],
+      answer3_votes: [],
+      answer4_votes: [],
+    );
+
+    await docpolls.set(toPostpoll.toJson());
+    await FirebaseFirestore.instance.collection("news").doc(docpolls.id).set({
+      "answer_ids": FieldValue.arrayUnion(["1", "2", "3", "4"]),
+      "answer_texts": FieldValue.arrayUnion([
+        _ans1Controller.text,
+        _ans2Controller.text,
+        _ans3Controller.text,
+        _ans4Controller.text,
+      ]),
+      "answer1_votes": FieldValue.arrayUnion(["15", "200", "30", "45"]),
+      "answer2_votes": FieldValue.arrayUnion(["15", "200", "30"]),
+    }, SetOptions(merge: true));
+  }
+
   static const _MONTHS = {
     'Jan': '01',
     'Feb': '02',
@@ -73,7 +142,6 @@ class PostController extends ChangeNotifier {
     return _allNews!;
   }
 
-
   Future<void> checkdatainiFirestore() async {
     await getAllNews();
     List? allLinks = [];
@@ -104,7 +172,8 @@ class PostController extends ChangeNotifier {
         .collection('news')
         .orderBy('publishedDate', descending: true)
         .snapshots()
-        .map((snapshot) => snapshot.docs.map((e) => News.fromJson(e.data())).toList());
+        .map((snapshot) =>
+            snapshot.docs.map((e) => News.fromJson(e.data())).toList());
   }
 
   Future<void> postNews(News news) async {
@@ -118,16 +187,17 @@ class PostController extends ChangeNotifier {
       publishedDate: news.publishedDate,
       title: news.title,
     );
-    await sendNotification(news.title!,news.description!,news.image!);
+    //await sendNotification(news.title!, news.description!, news.image!);
     docNews.set(toPostNews.toJson());
   }
 
-  Future sendNotification (String title,String detail,String image) async{
+  Future sendNotification(String title, String detail, String image) async {
     await http.post(
       Uri.parse('https://fcm.googleapis.com/fcm/send'),
       headers: <String, String>{
         'Content-Type': 'application/json',
-        'Authorization': 'key=AAAA-EMUP80:APA91bHYTIaCNkxJXDqpkiwXbitc2wvVF16Qu4DaiNKmaqCE3Do4YtMZfbp-MSu7Y6YY2n7tyx5w_mlTMgi0T0NhGB-vc0tdWp49yRmfXZ1eRjku4txM4R1_Eg6r0rWS4FJkQ1Wx96CD',
+        'Authorization':
+            'key=AAAA-EMUP80:APA91bHYTIaCNkxJXDqpkiwXbitc2wvVF16Qu4DaiNKmaqCE3Do4YtMZfbp-MSu7Y6YY2n7tyx5w_mlTMgi0T0NhGB-vc0tdWp49yRmfXZ1eRjku4txM4R1_Eg6r0rWS4FJkQ1Wx96CD',
       },
       body: jsonEncode(
         <String, dynamic>{
@@ -135,7 +205,7 @@ class PostController extends ChangeNotifier {
             'body': detail,
             'title': title,
             'image': image,
-            'sound':'default'
+            'sound': 'default'
           },
           'priority': 'normal',
           'data': <String, dynamic>{
@@ -148,11 +218,6 @@ class PostController extends ChangeNotifier {
       ),
     );
   }
-
-
-
-
-
 
   Future<void> deleteNews(String id) async {
     _firestore.collection('news').doc(id).delete();

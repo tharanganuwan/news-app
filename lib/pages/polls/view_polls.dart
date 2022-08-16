@@ -39,8 +39,11 @@ class _ViewPollState extends State<ViewPoll> {
               child: FlutterPolls(
                 pollId: poll['id'].toString(),
                 // hasVoted: hasVoted.value,
-                // userVotedOptionId: userVotedOptionId.value,
+                // votesText: "aa",
+
                 onVoted: (PollOption pollOption, int newTotalVotes) async {
+                  print("pollOption.id");
+
                   await Future.delayed(const Duration(seconds: 2));
 
                   /// If HTTP status is success, return true else false
@@ -57,6 +60,7 @@ class _ViewPollState extends State<ViewPoll> {
                     ),
                   ),
                 ),
+
                 pollOptions: List<PollOption>.from(
                   poll['options'].map(
                     (option) {
