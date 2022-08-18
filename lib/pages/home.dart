@@ -3,7 +3,6 @@ import 'package:cybehawks/components/news_card.dart';
 import 'package:cybehawks/controller/auth.dart';
 import 'package:cybehawks/controller/post_controller.dart';
 import 'package:cybehawks/models/news.dart';
-import 'package:cybehawks/pages/add_poll_screen.dart';
 import 'package:cybehawks/pages/add_post_screen.dart';
 import 'package:cybehawks/pages/login.dart';
 import 'package:cybehawks/pages/polls/create_polls.dart';

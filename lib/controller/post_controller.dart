@@ -34,6 +34,13 @@ class PostController extends ChangeNotifier {
         _ans3Controller.text.isEmpty ||
         _ans4Controller.text.isEmpty) {
       validate = false;
+    } else if (_ans1Controller.text == _ans2Controller.text ||
+        _ans1Controller.text == _ans3Controller.text ||
+        _ans1Controller.text == _ans4Controller.text ||
+        _ans2Controller.text == _ans3Controller.text ||
+        _ans2Controller.text == _ans4Controller.text ||
+        _ans3Controller.text == _ans4Controller.text) {
+      validate = false;
     } else {
       validate = true;
     }
@@ -43,7 +50,6 @@ class PostController extends ChangeNotifier {
   News? toPostpoll;
   // List<News>? _allpost;
   // List<News>? get allpost => _allpost;
-
   void postPoll() async {
     final docpolls = _firestore.collection('news').doc();
     final toPostpoll = News(
@@ -73,9 +79,46 @@ class PostController extends ChangeNotifier {
         _ans3Controller.text,
         _ans4Controller.text,
       ]),
-      "answer1_votes": FieldValue.arrayUnion(["15", "200", "30", "45"]),
-      "answer2_votes": FieldValue.arrayUnion(["15", "200", "30"]),
     }, SetOptions(merge: true));
+  }
+
+  void addvote(
+    String userId,
+    String newsId,
+    int id,
+  ) async {
+    var x = await _firestore.collection('news').doc(newsId).get();
+    List<dynamic> answer1_votes = x['answer1_votes'];
+    List<dynamic> answer2_votes = x['answer2_votes'];
+    List<dynamic> answer3_votes = x['answer3_votes'];
+    List<dynamic> answer4_votes = x['answer4_votes'];
+
+    if (answer1_votes.contains(userId) ||
+        answer2_votes.contains(userId) ||
+        answer3_votes.contains(userId) ||
+        answer4_votes.contains(userId)) {
+      print("alrady vatedd");
+    } else {
+      if (id == 1) {
+        await FirebaseFirestore.instance.collection("news").doc(newsId).set({
+          "answer1_votes": FieldValue.arrayUnion([userId])
+        }, SetOptions(merge: true));
+      } else if (id == 2) {
+        await FirebaseFirestore.instance.collection("news").doc(newsId).set({
+          "answer2_votes": FieldValue.arrayUnion([userId])
+        }, SetOptions(merge: true));
+      } else if (id == 3) {
+        await FirebaseFirestore.instance.collection("news").doc(newsId).set({
+          "answer3_votes": FieldValue.arrayUnion([userId])
+        }, SetOptions(merge: true));
+      } else if (id == 4) {
+        await FirebaseFirestore.instance.collection("news").doc(newsId).set({
+          "answer4_votes": FieldValue.arrayUnion([userId])
+        }, SetOptions(merge: true));
+      } else {
+        print("Error");
+      }
+    }
   }
 
   static const _MONTHS = {

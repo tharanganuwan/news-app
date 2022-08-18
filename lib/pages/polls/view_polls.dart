@@ -17,89 +17,92 @@ class _ViewPollState extends State<ViewPoll> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         padding: const EdgeInsets.all(20),
-        child: ListView.builder(
-          itemCount: polls().length,
-          itemBuilder: (BuildContext context, int index) {
-            final Map<String, dynamic> poll = polls()[index];
+        child: Container(
+          child: ListView.builder(
+            itemCount: polls().length,
+            itemBuilder: (BuildContext context, int index) {
+              final Map<String, dynamic> poll = polls()[index];
 
-            final int days = DateTime(
-              poll['end_date'].year,
-              poll['end_date'].month,
-              poll['end_date'].day,
-            )
-                .difference(DateTime(
-                  DateTime.now().year,
-                  DateTime.now().month,
-                  DateTime.now().day,
-                ))
-                .inDays;
+              final int days = DateTime(
+                poll['end_date'].year,
+                poll['end_date'].month,
+                poll['end_date'].day,
+              )
+                  .difference(DateTime(
+                    DateTime.now().year,
+                    DateTime.now().month,
+                    DateTime.now().day,
+                  ))
+                  .inDays;
 
-            return Container(
-              margin: const EdgeInsets.only(bottom: 20),
-              child: FlutterPolls(
-                pollId: poll['id'].toString(),
-                // hasVoted: hasVoted.value,
-                // votesText: "aa",
+              return Container(
+                margin: const EdgeInsets.only(bottom: 20),
+                child: FlutterPolls(
+                  pollId: poll['id'].toString(),
+                  // hasVoted: hasVoted.value,
+                  // votesText: "aa",
 
-                onVoted: (PollOption pollOption, int newTotalVotes) async {
-                  print("pollOption.id");
+                  onVoted: (PollOption pollOption, int newTotalVotes) async {
+                    print("pollOption.id");
 
-                  await Future.delayed(const Duration(seconds: 2));
+                    //await Future.delayed(const Duration(seconds: 2));
 
-                  /// If HTTP status is success, return true else false
-                  return true;
-                },
-                pollEnded: days < 0,
-                pollTitle: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    poll['question'],
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
+                    /// If HTTP status is success, return true else false
+
+                    return true;
+                  },
+                  pollEnded: days < 0,
+                  pollTitle: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      poll['question'],
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
-                ),
 
-                pollOptions: List<PollOption>.from(
-                  poll['options'].map(
-                    (option) {
-                      var a = PollOption(
-                        id: option['id'],
-                        title: Text(
-                          option['title'],
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
+                  pollOptions: List<PollOption>.from(
+                    poll['options'].map(
+                      (option) {
+                        var a = PollOption(
+                          id: option['id'],
+                          title: Text(
+                            option['title'],
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
-                        votes: option['votes'],
-                      );
-                      return a;
-                    },
+                          votes: option['votes'],
+                        );
+                        return a;
+                      },
+                    ),
+                  ),
+                  votedPercentageTextStyle: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  metaWidget: Row(
+                    children: [
+                      const SizedBox(width: 6),
+                      const Text(
+                        '•',
+                      ),
+                      const SizedBox(
+                        width: 6,
+                      ),
+                      Text(
+                        days < 0 ? "ended" : "ends $days days",
+                      ),
+                    ],
                   ),
                 ),
-                votedPercentageTextStyle: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-                metaWidget: Row(
-                  children: [
-                    const SizedBox(width: 6),
-                    const Text(
-                      '•',
-                    ),
-                    const SizedBox(
-                      width: 6,
-                    ),
-                    Text(
-                      days < 0 ? "ended" : "ends $days days",
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );
