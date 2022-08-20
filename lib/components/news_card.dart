@@ -64,7 +64,7 @@ class NewsCard extends StatelessWidget {
         //   )
         ? Consumer<PostController>(
             builder: (context, value, child) => Container(
-                  color: Colors.amber,
+                  //  color: Colors.amber,
 
                   height: MediaQuery.of(context).size.height / 3,
                   //padding: const EdgeInsets.all(20),
@@ -72,7 +72,7 @@ class NewsCard extends StatelessWidget {
                     child: ListView.builder(
                       itemCount: polls().length,
                       itemBuilder: (BuildContext context, int index) {
-                        final Map<String, dynamic> poll = polls()[index];
+                        final Map<String, dynamic> poll = polls()[0];
 
                         final int days = DateTime(
                           poll['end_date'].year,
@@ -87,7 +87,7 @@ class NewsCard extends StatelessWidget {
                             .inDays;
 
                         return Container(
-                          color: Colors.red,
+                          //   color: Colors.red,
                           margin: const EdgeInsets.only(bottom: 20),
                           child: FlutterPolls(
                             pollId: poll['id'].toString(),
@@ -147,8 +147,19 @@ class NewsCard extends StatelessWidget {
                                 const SizedBox(
                                   width: 6,
                                 ),
-                                Text(
-                                  days < 0 ? "ended" : "ends $days days",
+                                Row(
+                                  children: [
+                                    Text(
+                                      days < 0 ? "ended" : "ends $days days",
+                                    ),
+                                    Text("View Result"),
+                                    SizedBox(width: 10),
+                                    Text("Undo"),
+                                    SizedBox(width: 10),
+                                    Text("VDelete"),
+                                    SizedBox(width: 10),
+                                    Text("Edit"),
+                                  ],
                                 ),
                               ],
                             ),

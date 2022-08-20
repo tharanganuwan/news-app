@@ -57,6 +57,7 @@ dependencies:
   firebase_messaging: ^11.2.6
   modal_bottom_sheet: ^2.1.0
   flutter_polls: ^0.0.9
+  animate_do: ^2.1.0
 
 dependency_overrides:
   firebase_messaging_platform_interface: 3.1.6

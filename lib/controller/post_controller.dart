@@ -219,6 +219,16 @@ class PostController extends ChangeNotifier {
             snapshot.docs.map((e) => News.fromJson(e.data())).toList());
   }
 
+  Stream<List<News>> getAllPollFromFirebase() {
+    return _firestore
+        .collection('news')
+        .where('p_ispoll', isEqualTo: 'yes')
+        //.orderBy('publishedDate', descending: true)
+        .snapshots()
+        .map((snapshot) =>
+            snapshot.docs.map((e) => News.fromJson(e.data())).toList());
+  }
+
   Future<void> postNews(News news) async {
     final docNews = _firestore.collection('news').doc();
     final toPostNews = News(

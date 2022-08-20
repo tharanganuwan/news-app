@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:animate_do/animate_do.dart';
 import 'package:cybehawks/components/primary_button.dart';
 import 'package:cybehawks/controller/post_controller.dart';
 import 'package:cybehawks/models/news.dart';
@@ -88,124 +89,135 @@ class _AddPostScreenState extends State<AddPostScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Post'),
-      ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              TextFormField(
-                controller: _titleController,
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  hintText: 'Title',
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Theme.of(context).primaryColor),
-                  ),
-                  hintStyle: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black.withOpacity(0.50),
+      body: FadeInUp(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+          child: Form(
+            key: _formKey,
+            child: ListView(
+              children: [
+                SizedBox(
+                  height: 30,
+                ),
+                Center(
+                  child: Text(
+                    'Create Poll',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please Enter Title';
-                  }
+                TextFormField(
+                  controller: _titleController,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    hintText: 'Title',
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Theme.of(context).primaryColor),
+                    ),
+                    hintStyle: TextStyle(
+                      fontSize: 14,
+                      color: Colors.black.withOpacity(0.50),
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please Enter Title';
+                    }
 
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _linkController,
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  hintText: 'Link',
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Theme.of(context).primaryColor),
-                  ),
-                  hintStyle: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black.withOpacity(0.50),
-                  ),
+                    return null;
+                  },
                 ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please Enter Link';
-                  }
+                TextFormField(
+                  controller: _linkController,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    hintText: 'Link',
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Theme.of(context).primaryColor),
+                    ),
+                    hintStyle: TextStyle(
+                      fontSize: 14,
+                      color: Colors.black.withOpacity(0.50),
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please Enter Link';
+                    }
 
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _descriptionController,
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  hintText: 'Description',
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Theme.of(context).primaryColor),
-                  ),
-                  hintStyle: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black.withOpacity(0.50),
-                  ),
+                    return null;
+                  },
                 ),
-                minLines: 10,
-                maxLines: 3000,
-                maxLength: 3000,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please Enter Description';
-                  }
+                TextFormField(
+                  controller: _descriptionController,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    hintText: 'Description',
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Theme.of(context).primaryColor),
+                    ),
+                    hintStyle: TextStyle(
+                      fontSize: 14,
+                      color: Colors.black.withOpacity(0.50),
+                    ),
+                  ),
+                  minLines: 10,
+                  maxLines: 3000,
+                  maxLength: 3000,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please Enter Description';
+                    }
 
-                  return null;
-                },
-              ),
-              pickedImage == null ? Text('Select image') : SizedBox(),
-              ElevatedButton.icon(
-                onPressed: () => _upload('gallery'),
-                icon: const Icon(Icons.library_add),
-                label: const Text('Gallery'),
-              ),
-              (processingStatus)
-                  ? Column(
-                      children: [
-                        Text('Processing Image'),
-                        LinearProgressIndicator()
-                      ],
-                    )
-                  : SizedBox(),
-              SizedBox(
-                width: double.infinity,
-                child: PrimaryButton(
-                  text: 'Post News',
-                  onPressed: imageUrl == null
-                      ? null
-                      : () async {
-                          if (_formKey.currentState!.validate()) {
-                            debugPrint('Posting NEws');
-                            await Provider.of<PostController>(context,
-                                    listen: false)
-                                .postNews(
-                              News(
-                                image: imageUrl,
-                                title: _titleController.text,
-                                description: _descriptionController.text,
-                                link: _linkController.text,
-                                publishedDate: DateTime.now(),
-                              ),
-                            );
-                            Navigator.of(context).pop();
-                          }
-                        },
+                    return null;
+                  },
                 ),
-              ),
-            ],
+                pickedImage == null ? Text('Select image') : SizedBox(),
+                ElevatedButton.icon(
+                  onPressed: () => _upload('gallery'),
+                  icon: const Icon(Icons.library_add),
+                  label: const Text('Gallery'),
+                ),
+                (processingStatus)
+                    ? Column(
+                        children: [
+                          Text('Processing Image'),
+                          LinearProgressIndicator()
+                        ],
+                      )
+                    : SizedBox(),
+                SizedBox(
+                  width: double.infinity,
+                  child: PrimaryButton(
+                    text: 'Post News',
+                    onPressed: imageUrl == null
+                        ? null
+                        : () async {
+                            if (_formKey.currentState!.validate()) {
+                              debugPrint('Posting NEws');
+                              await Provider.of<PostController>(context,
+                                      listen: false)
+                                  .postNews(
+                                News(
+                                  image: imageUrl,
+                                  title: _titleController.text,
+                                  description: _descriptionController.text,
+                                  link: _linkController.text,
+                                  publishedDate: DateTime.now(),
+                                ),
+                              );
+                              Navigator.of(context).pop();
+                            }
+                          },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

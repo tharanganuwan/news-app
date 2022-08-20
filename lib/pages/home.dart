@@ -1,11 +1,12 @@
 import 'package:cybehawks/auth/auth_bloc.dart';
+import 'package:cybehawks/components/custom_form.dart';
 import 'package:cybehawks/components/news_card.dart';
 import 'package:cybehawks/controller/auth.dart';
 import 'package:cybehawks/controller/post_controller.dart';
 import 'package:cybehawks/models/news.dart';
+import 'package:cybehawks/pages/add_poll_screen.dart';
 import 'package:cybehawks/pages/add_post_screen.dart';
 import 'package:cybehawks/pages/login.dart';
-import 'package:cybehawks/pages/polls/create_polls.dart';
 import 'package:cybehawks/pages/profile.dart';
 import 'package:cybehawks/pages/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -96,158 +97,151 @@ class _HomeState extends State<Home> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: (FirebaseAuth.instance.currentUser?.email ==
-                  'rocketnuwan30@gmail.com' ||
-              FirebaseAuth.instance.currentUser?.email ==
-                  "cybehawksa@gmail.com")
-          ? FloatingActionButton(
-              child: const Icon(Icons.add),
-              onPressed: () {
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (_) => const AddPostScreen()));
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: Text(
-                      "Create New",
-                      textAlign: TextAlign.center,
-                    ),
-                    content: SizedBox(
-                      height: MediaQuery.of(context).size.height / 7,
-                      child: Column(
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => const AddPostScreen()));
-                            },
-                            child: Text("News"),
-                            style: ElevatedButton.styleFrom(
-                              fixedSize: const Size(double.maxFinite, 28),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50)),
-                            ),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => const CreatePoll()));
-                            },
-                            child: Text("Polls"),
-                            style: ElevatedButton.styleFrom(
-                              fixedSize: const Size(double.maxFinite, 28),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50)),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          return;
-                        },
-                        child: Text("Cencle"),
-                      ),
-                    ],
-                  ),
-                );
-              })
-          : const SizedBox(),
-      appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 10.0),
-          child: Image.asset('assets/images/logo-transparent.png'),
-        ),
-        title: const Text('CybeHawks News'),
-        actions: [
-          if (FirebaseAuth.instance.currentUser != null)
-            PopupMenuButton(
-              onSelected: (value) async {
-                switch (value) {
-                  case 0:
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const Profile(),
-                      ),
-                    );
-                    break;
-                  case 1:
-                    if (Provider.of<AuthController>(context, listen: false)
-                            .user ==
-                        null) {
-                      await Provider.of<AuthController>(context, listen: false)
-                          .logoutPhoneUser();
-
-                      Navigator.pushReplacement(
+  Widget build(BuildContext context) => DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        floatingActionButton: (FirebaseAuth.instance.currentUser?.email ==
+                    'rocketnuwan30@gmail.com' ||
+                FirebaseAuth.instance.currentUser?.email ==
+                    "cybehawksa@gmail.com")
+            ? FloatingActionButton(
+                child: const Icon(Icons.add),
+                onPressed: () {
+                  ShowForm.showForm(context, null);
+                })
+            : const SizedBox(),
+        appBar: AppBar(
+          leading: Padding(
+            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 10.0),
+            child: Image.asset('assets/images/logo-transparent.png'),
+          ),
+          title: const Text('CybeHawks News'),
+          actions: [
+            if (FirebaseAuth.instance.currentUser != null)
+              PopupMenuButton(
+                onSelected: (value) async {
+                  switch (value) {
+                    case 0:
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => HomeScreen(),
+                          builder: (_) => const Profile(),
                         ),
                       );
-                    } else {
-                      await Provider.of<AuthController>(context, listen: false)
-                          .logoutGoogleAcc();
-                    }
+                      break;
+                    case 1:
+                      if (Provider.of<AuthController>(context, listen: false)
+                              .user ==
+                          null) {
+                        await Provider.of<AuthController>(context,
+                                listen: false)
+                            .logoutPhoneUser();
 
-                    break;
-                  default:
-                }
-              },
-              itemBuilder: (context) =>
-                  FirebaseAuth.instance.currentUser != null
-                      ? [
-                          const PopupMenuItem(
-                            value: 0,
-                            child: Text('Profile'),
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => HomeScreen(),
                           ),
-                          const PopupMenuItem(
-                            child: Text('Log out'),
-                            value: 1,
-                          ),
-                        ]
-                      : [],
+                        );
+                      } else {
+                        await Provider.of<AuthController>(context,
+                                listen: false)
+                            .logoutGoogleAcc();
+                      }
+
+                      break;
+                    default:
+                  }
+                },
+                itemBuilder: (context) =>
+                    FirebaseAuth.instance.currentUser != null
+                        ? [
+                            const PopupMenuItem(
+                              value: 0,
+                              child: Text('Profile'),
+                            ),
+                            const PopupMenuItem(
+                              child: Text('Log out'),
+                              value: 1,
+                            ),
+                          ]
+                        : [],
+              ),
+          ],
+          bottom: TabBar(
+            // padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            tabs: [
+              Tab(
+                text: 'News',
+              ),
+              Tab(
+                text: 'Polls',
+              )
+            ],
+            indicator: ShapeDecoration(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              )),
+              color: Color.fromARGB(255, 74, 189, 187),
             ),
-        ],
-      ),
-      body: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          child: StreamBuilder(
-            stream: Provider.of<PostController>(context, listen: false)
-                .getAllNewsFromFirebase(),
-            builder: (context, AsyncSnapshot<List<News>> snapshot) {
-              if (snapshot.hasData) {
-                return ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index) {
-                    return NewsCard(
-                      news: snapshot.data![index],
-                    );
-                  },
-                );
-              } else if (snapshot.hasError) {
-                return Center(
-                  child:
-                      Text('Error fetching data: ' + snapshot.error.toString()),
-                );
-              } else {
-                return const Center(child: CircularProgressIndicator());
-              }
-            },
           ),
         ),
-      ),
-    );
-  }
+        body: TabBarView(children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            child: StreamBuilder(
+              stream: Provider.of<PostController>(context, listen: false)
+                  .getAllNewsFromFirebase(),
+              builder: (context, AsyncSnapshot<List<News>> snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      return NewsCard(
+                        news: snapshot.data![index],
+                      );
+                    },
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text(
+                        'Error fetching data: ' + snapshot.error.toString()),
+                  );
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              },
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            child: StreamBuilder(
+              stream: Provider.of<PostController>(context, listen: false)
+                  .getAllPollFromFirebase(),
+              builder: (context, AsyncSnapshot<List<News>> snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      return NewsCard(
+                        news: snapshot.data![index],
+                      );
+                    },
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text(
+                        'Error fetching data: ' + snapshot.error.toString()),
+                  );
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              },
+            ),
+          ),
+        ]),
+      ));
 }

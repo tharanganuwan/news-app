@@ -1,9 +1,5 @@
 import 'package:cybehawks/controller/auth.dart';
 import 'package:cybehawks/controller/post_controller.dart';
-import 'package:cybehawks/pages/add_post_screen.dart';
-import 'package:cybehawks/pages/home.dart';
-import 'package:cybehawks/pages/polls/create_polls.dart';
-import 'package:cybehawks/pages/polls/view_polls.dart';
 import 'package:cybehawks/pages/profile.dart';
 import 'package:cybehawks/pages/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -111,20 +107,19 @@ class _MyAppState extends State<MyApp> {
       child: BlocProvider(
         create: (context) => AuthBloc(),
         child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            key: UniqueKey(),
-            title: 'CyberHawks News',
-            theme: ThemeData(
-              primaryColor: const Color(0xff009A98),
-              appBarTheme: const AppBarTheme(
-                backgroundColor: Color(0xff009A98),
-                elevation: 1.4,
-              ),
+          debugShowCheckedModeBanner: false,
+          key: UniqueKey(),
+          title: 'CyberHawks News',
+          theme: ThemeData(
+            primaryColor: const Color(0xff009A98),
+            appBarTheme: const AppBarTheme(
+              backgroundColor: Color(0xff009A98),
+              elevation: 1.4,
             ),
-            home: SplashScreen()
-
-            //home: Profile(),
-            ),
+          ),
+          home: SplashScreen(),
+          //home: Profile(),
+        ),
       ),
     );
   }
