@@ -64,7 +64,7 @@ class NewsCard extends StatelessWidget {
         //   )
         ? Consumer<PostController>(
             builder: (context, value, child) => Container(
-                  //  color: Colors.amber,
+                  color: Colors.amber,
 
                   height: MediaQuery.of(context).size.height / 3,
                   //padding: const EdgeInsets.all(20),
@@ -87,7 +87,7 @@ class NewsCard extends StatelessWidget {
                             .inDays;
 
                         return Container(
-                          //   color: Colors.red,
+                          color: Colors.red,
                           margin: const EdgeInsets.only(bottom: 20),
                           child: FlutterPolls(
                             pollId: poll['id'].toString(),
