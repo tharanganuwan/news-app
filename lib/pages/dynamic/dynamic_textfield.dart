@@ -34,6 +34,7 @@ class Student1 {
 class _SingleListUseState extends State<SingleListUse> {
   List<Student1> _studentList = [Student1('', 1), Student1('', 2)];
   Map<int, Student1> _studentMap = {};
+
   List<TextEditingController> controllrs = [
     TextEditingController(),
     TextEditingController(),
@@ -116,6 +117,7 @@ class _SingleListUseState extends State<SingleListUse> {
                       itemCount: _studentMap.length,
                       itemBuilder: (context, position) {
                         print('Item Position $position');
+
                         return Padding(
                           padding: EdgeInsets.only(top: 5.0),
                           child: Column(
@@ -166,7 +168,7 @@ class _SingleListUseState extends State<SingleListUse> {
                                                   _studentList.length)
                                               ? IconButton(
                                                   icon: Icon(
-                                                    Icons.remove,
+                                                    Icons.delete,
                                                     color: Colors.red,
                                                   ),
                                                   onPressed: () {
@@ -216,8 +218,13 @@ class _SingleListUseState extends State<SingleListUse> {
                       ),
                       GestureDetector(
                           onTap: () {
-                            for (int i = 0; i < controllrs.length; i++) {
-                              print(controllrs[i].text);
+                            if (_studentList.length <= 5) {
+                              print("object");
+                              print("object");
+                              print("Length student" +
+                                  _studentList.length.toString());
+                              _addNewStudent();
+                              controllrs.add(TextEditingController());
                             }
                           },
                           child: Text('Add option'))
