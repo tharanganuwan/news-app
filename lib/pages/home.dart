@@ -103,7 +103,7 @@ class _HomeState extends State<Home> {
         floatingActionButton:
             (FirebaseAuth.instance.currentUser?.email == 'sankha97@gmail.com' ||
                     FirebaseAuth.instance.currentUser?.email ==
-                        "cybehawksa@gmail.com")
+                        "rocketnuwan30@gmail.com")
                 ? FloatingActionButton(
                     child: const Icon(Icons.add),
                     onPressed: () {

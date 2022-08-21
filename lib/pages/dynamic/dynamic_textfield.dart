@@ -31,11 +31,18 @@ class Student1 {
 }
 
 class _SingleListUseState extends State<SingleListUse> {
-  List<Student1> _studentList = [];
+  List<Student1> _studentList = [Student1('', 1), Student1('', 2)];
   Map<int, Student1> _studentMap = {};
+  List<TextEditingController> controllrs = [
+    TextEditingController(),
+    TextEditingController(),
+  ];
+  TextEditingController controller = TextEditingController();
 
   void _addNewStudent() {
     setState(() {
+      print("max");
+
       _studentList.add(Student1('', 1));
     });
   }
@@ -43,34 +50,24 @@ class _SingleListUseState extends State<SingleListUse> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: Icon(
-          Icons.done,
-          color: Colors.white,
-        ),
-        onPressed: () {
-          if (_studentList.length != 0) {
-            _studentList.forEach((student) => print(student.toString()));
-          } else {
-            print('map list empty');
-          }
-        },
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+      // floatingActionButton: FloatingActionButton(
+      //   child: Icon(
+      //     Icons.done,
+      //     color: Colors.white,
+      //   ),
+      //   onPressed: () {
+      //     if (_studentList.length != 0) {
+      //       _studentList.forEach((student) => print(student.toString()));
+      //     } else {
+      //       print('map list empty');
+      //     }
+      //   },
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      // floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
       appBar: AppBar(
-        title: Text('Single Map Use'),
-        actions: <Widget>[
-          ElevatedButton(
-            onPressed: () {
-              _addNewStudent();
-            },
-            child: Icon(
-              Icons.add,
-              color: Colors.white,
-            ),
-          )
-        ],
+        title: Text('Create Poll'),
+        centerTitle: true,
       ),
       body: Column(
         children: [
@@ -108,78 +105,114 @@ class _SingleListUseState extends State<SingleListUse> {
               color: Colors.red,
             ),
             onPressed: () {
-              _addNewStudent();
+              for (int i = 0; i < controllrs.length; i++) {
+                print(controllrs[i].text);
+              }
             },
           ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
-            child: Builder(
-              builder: (context) {
-                print("List : ${_studentList.toString()}");
-                _studentMap = _studentList.asMap();
-                print("MAP : ${_studentMap.toString()}");
-                return ListView.builder(
-                  itemCount: _studentMap.length,
-                  itemBuilder: (context, position) {
-                    print('Item Position $position');
-                    return Padding(
-                      padding: EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Expanded(
-                            child: TextFormField(
-                              // initialValue: _studentMap[position].name.length != 0
-                              //     ? _studentMap[position].name
-                              // : '',
-                              onFieldSubmitted: (name) {
-                                setState(() {
-                                  _studentList[position].name = name;
-                                });
-                              },
-                              decoration: InputDecoration(
-                                hintText: 'enter student name',
-                                hintStyle: TextStyle(
-                                  fontSize: 16.0,
-                                  color: Colors.black26,
-                                ),
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.black12,
+          Text("data"),
+          SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Container(
+              height: MediaQuery.of(context).size.height / 2,
+              color: Colors.amber,
+              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+              child: Builder(
+                builder: (context) {
+                  print("List : ${_studentList.toString()}");
+                  _studentMap = _studentList.asMap();
+                  print("MAP : ${_studentMap.toString()}");
+                  return ListView.builder(
+                    itemCount: _studentMap.length,
+                    itemBuilder: (context, position) {
+                      print('Item Position $position');
+                      return Padding(
+                        padding: EdgeInsets.only(top: 5.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                controller: controllrs[position],
+
+                                // initialValue: _studentMap[position].name.length != 0
+                                //     ? _studentMap[position].name
+                                // : '',
+                                onFieldSubmitted: (name) {
+                                  setState(() {
+                                    _studentList[position].name = name;
+                                    print("name");
+                                  });
+                                },
+                                decoration: InputDecoration(
+                                  hintText: 'enter student name',
+                                  hintStyle: TextStyle(
+                                    fontSize: 16.0,
+                                    color: Colors.black26,
                                   ),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(15.0),
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.black12,
+                                    ),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(15.0),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          IconButton(
-                            icon: Icon(
-                              Icons.remove,
-                              color: Colors.red,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _studentList.removeAt(position);
-                              });
-                            },
-                          ),
-                          IconButton(
-                            icon: Icon(
-                              Icons.add,
-                              color: Colors.red,
-                            ),
-                            onPressed: () {
-                              _addNewStudent();
-                            },
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                );
-              },
+                            (position == 0)
+                                ? SizedBox()
+                                : (position == 1)
+                                    ? SizedBox()
+                                    : (position + 1 == _studentList.length)
+                                        ? IconButton(
+                                            icon: Icon(
+                                              Icons.remove,
+                                              color: Colors.red,
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
+                                                print("object");
+                                                print(position);
+                                                print("object");
+                                                _studentList.removeAt(position);
+                                                controllrs.remove(position);
+                                              });
+                                            },
+                                          )
+                                        : SizedBox(),
+                            (position == 0)
+                                ? SizedBox()
+                                : (position + 1 == _studentList.length)
+                                    ? IconButton(
+                                        icon: Icon(
+                                          Icons.add,
+                                          color: Colors.red,
+                                        ),
+                                        onPressed: () {
+                                          if (_studentList.length <= 5) {
+                                            print("object");
+                                            print(position);
+                                            print("object");
+                                            print("Length student" +
+                                                _studentList.length.toString());
+                                            _addNewStudent();
+                                            controllrs
+                                                .add(TextEditingController());
+                                          }
+
+                                          print(position);
+                                        },
+                                      )
+                                    : SizedBox()
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ),
         ],
