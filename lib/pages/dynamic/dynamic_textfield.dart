@@ -39,7 +39,6 @@ class _SingleListUseState extends State<SingleListUse> {
     TextEditingController(),
     TextEditingController(),
   ];
-  TextEditingController controller = TextEditingController();
 
   void _addNewStudent() {
     setState(() {
@@ -135,6 +134,7 @@ class _SingleListUseState extends State<SingleListUse> {
                                 children: <Widget>[
                                   Expanded(
                                     child: TextFormField(
+                                      controller: controllrs[position],
                                       // initialValue: _studentMap[position].name.length != 0
                                       //     ? _studentMap[position].name
                                       // : '',
@@ -179,7 +179,7 @@ class _SingleListUseState extends State<SingleListUse> {
                                                       _studentList
                                                           .removeAt(position);
                                                       controllrs
-                                                          .remove(position);
+                                                          .removeAt(position);
                                                     });
                                                   },
                                                 )
@@ -302,6 +302,9 @@ class _SingleListUseState extends State<SingleListUse> {
                       // } else {
                       //   print("cancle");
                       // }
+                      for (int i = 0; i < controllrs.length; i++) {
+                        print(controllrs[i].text);
+                      }
                     }),
               )
             ],
