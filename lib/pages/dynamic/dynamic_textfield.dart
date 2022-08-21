@@ -1,5 +1,7 @@
 import 'package:cybehawks/components/primary_button.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class SingleListUse extends StatefulWidget {
   static final String tag = 'single-list-use';
@@ -39,7 +41,7 @@ class _SingleListUseState extends State<SingleListUse> {
     TextEditingController(),
     TextEditingController(),
   ];
-  TextEditingController controller = TextEditingController();
+  TextEditingController _dateController = TextEditingController();
 
   void _addNewStudent() {
     setState(() {
@@ -285,6 +287,7 @@ class _SingleListUseState extends State<SingleListUse> {
               //       },
               //       icon: Icon(Icons.date_range_outlined))
               // ]),
+
               Text(
                 'Poll duration *',
                 textAlign: TextAlign.start,
@@ -292,13 +295,23 @@ class _SingleListUseState extends State<SingleListUse> {
                   fontSize: 14,
                 ),
               ),
-              TextFormField(
-                // controller: value.questionController,
 
+              TextFormField(
+                controller: _dateController,
+                readOnly: true,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          // _dateController.text = _selectedValue.toString();
+                        });
+
+                        _showPicker(context);
+                      },
+                      icon: Icon(Icons.arrow_drop_down)),
                   border: OutlineInputBorder(),
-                  hintText: 'Enter Your Quection',
+                  //  hintText: 'Value: $_selectedValue',
                   hintStyle: TextStyle(
                     fontSize: 14,
                     color: Colors.black.withOpacity(0.50),
@@ -336,5 +349,68 @@ class _SingleListUseState extends State<SingleListUse> {
         ),
       ),
     );
+  }
+
+  int _selectedValue = 0;
+
+  void _showPicker(BuildContext ctx) {
+    showCupertinoModalBottomSheet(
+        context: ctx,
+        builder: (_) => Stack(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 250,
+                  child: CupertinoPicker(
+                    backgroundColor: Color.fromARGB(255, 230, 228, 228),
+                    itemExtent: 30,
+                    scrollController:
+                        FixedExtentScrollController(initialItem: 1),
+                    children: [
+                      Text('1 Days'),
+                      Text('3 Days'),
+                      Text('7 Days'),
+                      Text('2 Weeks'),
+                    ],
+                    onSelectedItemChanged: (value) {
+                      print(value);
+                      _selectedValue = value;
+
+                      print(_dateController.text);
+                      if (value == 0) {
+                        _dateController.text = "1 Days";
+                      } else if (value == 1) {
+                        _dateController.text = "3 Days";
+                      } else if (value == 2) {
+                        _dateController.text = "7 Days";
+                      } else if (value == 3) {
+                        _dateController.text = "2 Weeks";
+                      }
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ElevatedButton(
+                          onPressed: () {
+                            setState(() {});
+                            Navigator.pop(context);
+                          },
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                  Color.fromARGB(255, 152, 147, 147)),
+                              padding:
+                                  MaterialStateProperty.all(EdgeInsets.all(5)),
+                              textStyle: MaterialStateProperty.all(
+                                  TextStyle(fontSize: 12))),
+                          child: Text("Done")),
+                    ],
+                  ),
+                ),
+              ],
+            ));
   }
 }
