@@ -63,110 +63,273 @@ class NewsCard extends StatelessWidget {
         //     child: Text(news.p_question.toString()),
         //   )
         ? Consumer<PostController>(
-            builder: (context, value, child) => Container(
-                  //  color: Colors.amber,
+            builder: (context, value, child) => Card(
+                  child: Column(
+                    children: [
+                      Container(
+                        //  color: Colors.amber,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 8),
+                        height: MediaQuery.of(context).size.height / 3,
+                        //padding: const EdgeInsets.all(20),
+                        child: Center(
+                          child: ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: polls().length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final Map<String, dynamic> poll = polls()[index];
 
-                  height: MediaQuery.of(context).size.height / 3,
-                  //padding: const EdgeInsets.all(20),
-                  child: Center(
-                    child: ListView.builder(
-                      itemCount: polls().length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final Map<String, dynamic> poll = polls()[0];
+                              final int days = DateTime(
+                                poll['end_date'].year,
+                                poll['end_date'].month,
+                                poll['end_date'].day,
+                              )
+                                  .difference(DateTime(
+                                    DateTime.now().year,
+                                    DateTime.now().month,
+                                    DateTime.now().day,
+                                  ))
+                                  .inDays;
 
-                        final int days = DateTime(
-                          poll['end_date'].year,
-                          poll['end_date'].month,
-                          poll['end_date'].day,
-                        )
-                            .difference(DateTime(
-                              DateTime.now().year,
-                              DateTime.now().month,
-                              DateTime.now().day,
-                            ))
-                            .inDays;
+                              return Container(
+                                //   color: Colors.red,
+                                //margin: const EdgeInsets.only(bottom: 20),
+                                child: FlutterPolls(
+                                  pollId: poll['id'].toString(),
+                                  // hasVoted: hasVoted.value,
+                                  // userVotedOptionId: userVotedOptionId.value,
+                                  onVoted: (PollOption pollOption,
+                                      int newTotalVotes) async {
+                                    print(pollOption.id);
+                                    value.addvote(
+                                        FirebaseAuth.instance.currentUser!.uid,
+                                        news.id!,
+                                        pollOption.id!);
+                                    await Future.delayed(
+                                        const Duration(seconds: 2));
 
-                        return Container(
-                          //   color: Colors.red,
-                          margin: const EdgeInsets.only(bottom: 20),
-                          child: FlutterPolls(
-                            pollId: poll['id'].toString(),
-                            // hasVoted: hasVoted.value,
-                            // userVotedOptionId: userVotedOptionId.value,
-                            onVoted: (PollOption pollOption,
-                                int newTotalVotes) async {
-                              print(pollOption.id);
-                              value.addvote(
-                                  FirebaseAuth.instance.currentUser!.uid,
-                                  news.id!,
-                                  pollOption.id!);
-                              await Future.delayed(const Duration(seconds: 2));
-
-                              /// If HTTP status is success, return true else false
-                              return true;
-                            },
-                            pollEnded: days < 0,
-                            pollTitle: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                poll['question'],
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                            pollOptions: List<PollOption>.from(
-                              poll['options'].map(
-                                (option) {
-                                  var a = PollOption(
-                                    id: option['id'],
-                                    title: Text(
-                                      option['title'],
+                                    /// If HTTP status is success, return true else false
+                                    return true;
+                                  },
+                                  pollEnded: days < 0,
+                                  pollTitle: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      poll['question'],
                                       style: const TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                    votes: option['votes'],
-                                  );
-                                  return a;
-                                },
-                              ),
-                            ),
-                            votedPercentageTextStyle: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            metaWidget: Row(
-                              children: [
-                                const SizedBox(width: 6),
-                                const Text(
-                                  '•',
-                                ),
-                                const SizedBox(
-                                  width: 6,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      days < 0 ? "ended" : "ends $days days",
+                                  ),
+                                  pollOptions: List<PollOption>.from(
+                                    poll['options'].map(
+                                      (option) {
+                                        var a = PollOption(
+                                          id: option['id'],
+                                          title: Text(
+                                            option['title'],
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          votes: option['votes'],
+                                        );
+                                        return a;
+                                      },
                                     ),
-                                    Text("View Result"),
-                                    SizedBox(width: 10),
-                                    Text("Undo"),
-                                    SizedBox(width: 10),
-                                    Text("VDelete"),
-                                    SizedBox(width: 10),
-                                    Text("Edit"),
-                                  ],
+                                  ),
+                                  votedPercentageTextStyle: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  metaWidget: Row(
+                                    children: [
+                                      const SizedBox(width: 6),
+                                      const Text(
+                                        '•',
+                                      ),
+                                      const SizedBox(
+                                        width: 6,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            days < 0
+                                                ? "ended"
+                                                : "ends $days days",
+                                          ),
+                                          Text("View Result"),
+                                          SizedBox(width: 10),
+                                          Text("Undo"),
+                                          SizedBox(width: 10),
+                                          Text("VDelete"),
+                                          SizedBox(width: 10),
+                                          Text("Edit"),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                IconButton(
+                                  visualDensity: VisualDensity.compact,
+                                  onPressed: () {
+                                    if (FirebaseAuth.instance.currentUser ==
+                                        null) {
+                                      context
+                                          .read<AuthBloc>()
+                                          .add(AuthLoginEvent());
+                                      return;
+                                    }
+                                    Share.share(
+                                      '''CybeHawks Cyber Update you may be interested in ''' +
+                                          news.link!,
+                                      subject:
+                                          'CybeHawks Cyber Update you may be interested in',
+                                    );
+                                  },
+                                  icon: Icon(
+                                    Icons.share,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                ),
+                                TextButton.icon(
+                                  onPressed: () {
+                                    if (FirebaseAuth.instance.currentUser ==
+                                        null) {
+                                      context
+                                          .read<AuthBloc>()
+                                          .add(AuthLoginEvent());
+                                      return;
+                                    }
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) =>
+                                            CommentsScreen(news: news),
+                                      ),
+                                    );
+                                  },
+                                  icon: Icon(Icons.mode_comment_outlined),
+                                  style: ButtonStyle(
+                                    foregroundColor:
+                                        MaterialStateColor.resolveWith(
+                                      (states) =>
+                                          Theme.of(context).primaryColor,
+                                    ),
+                                  ),
+                                  label: (news.comment!.length > 0)
+                                      ? Text(
+                                          news.comment!.length.toString(),
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )
+                                      : SizedBox(),
+                                )
                               ],
                             ),
-                          ),
-                        );
-                      },
-                    ),
+                            const Spacer(),
+                            StreamBuilder(
+                              stream: FirebaseFirestore.instance
+                                  .collection('news')
+                                  .doc(news.id)
+                                  .snapshots(),
+                              builder: (context, AsyncSnapshot snapshot) {
+                                bool liked = false;
+                                if (snapshot.hasData) {
+                                  if (snapshot.data['like'].contains(
+                                      FirebaseAuth.instance.currentUser?.uid)) {
+                                    liked = true;
+                                  } else {
+                                    liked = false;
+                                  }
+                                }
+                                if (snapshot.hasData) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                      color: liked
+                                          ? Theme.of(context).primaryColor
+                                          : Colors.white,
+                                      border: Border.all(
+                                        color: Theme.of(context).primaryColor,
+                                        width: 1,
+                                      ),
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: InkWell(
+                                      onTap: () async {
+                                        if (FirebaseAuth.instance.currentUser ==
+                                            null) {
+                                          context
+                                              .read<AuthBloc>()
+                                              .add(AuthLoginEvent());
+                                          return;
+                                        }
+                                        await Provider.of<PostController>(
+                                                context,
+                                                listen: false)
+                                            .toggleLike(
+                                          news.id!,
+                                          FirebaseAuth
+                                              .instance.currentUser!.uid,
+                                        );
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 8,
+                                          vertical: 4,
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              snapshot.data['like'].length
+                                                  .toString(),
+                                              style: TextStyle(
+                                                color: liked
+                                                    ? Colors.white
+                                                    : Theme.of(context)
+                                                        .primaryColor,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 8,
+                                            ),
+                                            Icon(
+                                              Icons.thumb_up_alt_outlined,
+                                              size: 20,
+                                              color: liked
+                                                  ? Colors.white
+                                                  : Theme.of(context)
+                                                      .primaryColor,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                } else
+                                  return CircularProgressIndicator();
+                              },
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
                   ),
                 ))
         : GestureDetector(
