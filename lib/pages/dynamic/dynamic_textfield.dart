@@ -1,3 +1,4 @@
+import 'package:cybehawks/components/primary_button.dart';
 import 'package:flutter/material.dart';
 
 class SingleListUse extends StatefulWidget {
@@ -69,153 +70,236 @@ class _SingleListUseState extends State<SingleListUse> {
         title: Text('Create Poll'),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          Text(
-            'Your quection *',
-            textAlign: TextAlign.start,
-            style: TextStyle(
-              fontSize: 15,
-            ),
-          ),
-          TextFormField(
-            // controller: value.questionController,
-            maxLength: 300,
-            maxLines: 3,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Enter Your Quection',
-              hintStyle: TextStyle(
-                fontSize: 14,
-                color: Colors.black.withOpacity(0.50),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Your quection *',
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: 15,
+                ),
               ),
-            ),
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Please Enter Quection';
-              }
+              TextFormField(
+                // controller: value.questionController,
+                maxLength: 300,
+                maxLines: 3,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Enter Your Quection',
+                  hintStyle: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black.withOpacity(0.50),
+                  ),
+                ),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please Enter Quection';
+                  }
 
-              return null;
-            },
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.add,
-              color: Colors.red,
-            ),
-            onPressed: () {
-              for (int i = 0; i < controllrs.length; i++) {
-                print(controllrs[i].text);
-              }
-            },
-          ),
-          Text("data"),
-          SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Container(
-              height: MediaQuery.of(context).size.height / 2,
-              color: Colors.amber,
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
-              child: Builder(
-                builder: (context) {
-                  print("List : ${_studentList.toString()}");
-                  _studentMap = _studentList.asMap();
-                  print("MAP : ${_studentMap.toString()}");
-                  return ListView.builder(
-                    itemCount: _studentMap.length,
-                    itemBuilder: (context, position) {
-                      print('Item Position $position');
-                      return Padding(
-                        padding: EdgeInsets.only(top: 5.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                controller: controllrs[position],
-
-                                // initialValue: _studentMap[position].name.length != 0
-                                //     ? _studentMap[position].name
-                                // : '',
-                                onFieldSubmitted: (name) {
-                                  setState(() {
-                                    _studentList[position].name = name;
-                                    print("name");
-                                  });
-                                },
-                                decoration: InputDecoration(
-                                  hintText: 'enter student name',
-                                  hintStyle: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.black26,
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.black12,
-                                    ),
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(15.0),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            (position == 0)
-                                ? SizedBox()
-                                : (position == 1)
-                                    ? SizedBox()
-                                    : (position + 1 == _studentList.length)
-                                        ? IconButton(
-                                            icon: Icon(
-                                              Icons.remove,
-                                              color: Colors.red,
-                                            ),
-                                            onPressed: () {
-                                              setState(() {
-                                                print("object");
-                                                print(position);
-                                                print("object");
-                                                _studentList.removeAt(position);
-                                                controllrs.remove(position);
-                                              });
-                                            },
-                                          )
-                                        : SizedBox(),
-                            (position == 0)
-                                ? SizedBox()
-                                : (position + 1 == _studentList.length)
-                                    ? IconButton(
-                                        icon: Icon(
-                                          Icons.add,
-                                          color: Colors.red,
-                                        ),
-                                        onPressed: () {
-                                          if (_studentList.length <= 5) {
-                                            print("object");
-                                            print(position);
-                                            print("object");
-                                            print("Length student" +
-                                                _studentList.length.toString());
-                                            _addNewStudent();
-                                            controllrs
-                                                .add(TextEditingController());
-                                          }
-
-                                          print(position);
-                                        },
-                                      )
-                                    : SizedBox()
-                          ],
-                        ),
-                      );
-                    },
-                  );
+                  return null;
                 },
               ),
-            ),
+              Container(
+                height: MediaQuery.of(context).size.height / 3,
+                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+                child: Builder(
+                  builder: (context) {
+                    print("List : ${_studentList.toString()}");
+                    _studentMap = _studentList.asMap();
+                    print("MAP : ${_studentMap.toString()}");
+                    return ListView.builder(
+                      itemCount: _studentMap.length,
+                      itemBuilder: (context, position) {
+                        print('Item Position $position');
+                        return Padding(
+                          padding: EdgeInsets.only(top: 5.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Option',
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                ),
+                              ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Expanded(
+                                    child: TextFormField(
+                                      // initialValue: _studentMap[position].name.length != 0
+                                      //     ? _studentMap[position].name
+                                      // : '',
+                                      onFieldSubmitted: (name) {
+                                        setState(() {
+                                          _studentList[position].name = name;
+                                        });
+                                      },
+                                      decoration: InputDecoration(
+                                        hintText: 'Add option',
+                                        hintStyle: TextStyle(
+                                          fontSize: 14.0,
+                                          color: Colors.black26,
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Colors.black12,
+                                          ),
+                                          // borderRadius: BorderRadius.all(
+                                          //   Radius.circular(15.0),
+                                          // ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  (position == 0)
+                                      ? SizedBox()
+                                      : (position == 1)
+                                          ? SizedBox()
+                                          : (position + 1 ==
+                                                  _studentList.length)
+                                              ? IconButton(
+                                                  icon: Icon(
+                                                    Icons.remove,
+                                                    color: Colors.red,
+                                                  ),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      print("object");
+                                                      print(position);
+                                                      print("object");
+                                                      _studentList
+                                                          .removeAt(position);
+                                                      controllrs
+                                                          .remove(position);
+                                                    });
+                                                  },
+                                                )
+                                              : SizedBox(),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  _addNewStudent();
+                },
+                child: Container(
+                  width: 100,
+                  height: 30,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      color: Colors.amber
+                      // border: Border(
+                      //   left: BorderSide(
+                      //     color: Colors.green,
+                      //     width: 3,
+                      //   ),
+                      // ),
+                      ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.add,
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            for (int i = 0; i < controllrs.length; i++) {
+                              print(controllrs[i].text);
+                            }
+                          },
+                          child: Text('Add option'))
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+                Text("Select End Date:"),
+                SizedBox(
+                  width: 10,
+                ),
+                SizedBox(
+                  width: 150,
+                  child: TextFormField(
+                    readOnly: true,
+                    textAlign: TextAlign.center,
+                    //keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      hintText: 'date',
+                      //'${value.p_date.year}/${value.p_date.month}/${value.p_date.day}',
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Theme.of(context).primaryColor),
+                      ),
+                      hintStyle: TextStyle(
+                        fontSize: 14,
+                        color: Colors.black.withOpacity(0.50),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please Enter Quection';
+                      }
+
+                      return null;
+                    },
+                  ),
+                ),
+                // Text(
+                //   '${date.year},${date.month},${date.month}',
+                //   style: TextStyle(letterSpacing: 2, fontSize: 15),
+                // ),
+                IconButton(
+                    onPressed: () async {
+                      DateTime? newDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime(2022, 8, 30),
+                          firstDate: DateTime(2021),
+                          lastDate: DateTime(2030));
+
+                      if (newDate == null) return;
+
+                      setState(() => DateTime(2022, 8, 30));
+                    },
+                    icon: Icon(Icons.date_range_outlined))
+              ]),
+              SizedBox(
+                height: 30,
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: PrimaryButton(
+                    text: 'Add Poll',
+                    onPressed: () {
+                      // if (value.pollvalidate()) {
+                      //   print("ok");
+                      //   value.postPoll();
+                      //   Future.delayed(Duration(seconds: 2), () {
+                      //     Navigator.of(context).pop();
+                      //   });
+                      // } else {
+                      //   print("cancle");
+                      // }
+                    }),
+              )
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
