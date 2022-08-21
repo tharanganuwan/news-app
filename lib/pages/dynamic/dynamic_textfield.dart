@@ -1,5 +1,7 @@
 import 'package:cybehawks/components/primary_button.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class SingleListUse extends StatefulWidget {
   static final String tag = 'single-list-use';
@@ -39,7 +41,7 @@ class _SingleListUseState extends State<SingleListUse> {
     TextEditingController(),
     TextEditingController(),
   ];
-  TextEditingController controller = TextEditingController();
+  TextEditingController _dateController = TextEditingController();
 
   void _addNewStudent() {
     setState(() {
@@ -235,56 +237,94 @@ class _SingleListUseState extends State<SingleListUse> {
               SizedBox(
                 height: 20,
               ),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-                Text("Select End Date:"),
-                SizedBox(
-                  width: 10,
-                ),
-                SizedBox(
-                  width: 150,
-                  child: TextFormField(
-                    readOnly: true,
-                    textAlign: TextAlign.center,
-                    //keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                      hintText: 'date',
-                      //'${value.p_date.year}/${value.p_date.month}/${value.p_date.day}',
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Theme.of(context).primaryColor),
-                      ),
-                      hintStyle: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black.withOpacity(0.50),
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Please Enter Quection';
-                      }
+              // Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+              //   Text("Select End Date:"),
+              //   SizedBox(
+              //     width: 10,
+              //   ),
+              //   SizedBox(
+              //     width: 150,
+              //     child: TextFormField(
+              //       readOnly: true,
+              //       textAlign: TextAlign.center,
+              //       //keyboardType: TextInputType.text,
+              //       decoration: InputDecoration(
+              //         hintText: 'date',
+              //         //'${value.p_date.year}/${value.p_date.month}/${value.p_date.day}',
+              //         focusedBorder: UnderlineInputBorder(
+              //           borderSide:
+              //               BorderSide(color: Theme.of(context).primaryColor),
+              //         ),
+              //         hintStyle: TextStyle(
+              //           fontSize: 14,
+              //           color: Colors.black.withOpacity(0.50),
+              //         ),
+              //       ),
+              //       validator: (value) {
+              //         if (value!.isEmpty) {
+              //           return 'Please Enter Quection';
+              //         }
 
-                      return null;
-                    },
+              //         return null;
+              //       },
+              //     ),
+              //   ),
+              //   // Text(
+              //   //   '${date.year},${date.month},${date.month}',
+              //   //   style: TextStyle(letterSpacing: 2, fontSize: 15),
+              //   // ),
+              //   IconButton(
+              //       onPressed: () async {
+              //         DateTime? newDate = await showDatePicker(
+              //             context: context,
+              //             initialDate: DateTime(2022, 8, 30),
+              //             firstDate: DateTime(2021),
+              //             lastDate: DateTime(2030));
+
+              //         if (newDate == null) return;
+
+              //         setState(() => DateTime(2022, 8, 30));
+              //       },
+              //       icon: Icon(Icons.date_range_outlined))
+              // ]),
+
+              Text(
+                'Poll duration *',
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: 14,
+                ),
+              ),
+
+              TextFormField(
+                controller: _dateController,
+                readOnly: true,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          // _dateController.text = _selectedValue.toString();
+                        });
+
+                        _showPicker(context);
+                      },
+                      icon: Icon(Icons.arrow_drop_down)),
+                  border: OutlineInputBorder(),
+                  //  hintText: 'Value: $_selectedValue',
+                  hintStyle: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black.withOpacity(0.50),
                   ),
                 ),
-                // Text(
-                //   '${date.year},${date.month},${date.month}',
-                //   style: TextStyle(letterSpacing: 2, fontSize: 15),
-                // ),
-                IconButton(
-                    onPressed: () async {
-                      DateTime? newDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime(2022, 8, 30),
-                          firstDate: DateTime(2021),
-                          lastDate: DateTime(2030));
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please Enter Quection';
+                  }
 
-                      if (newDate == null) return;
-
-                      setState(() => DateTime(2022, 8, 30));
-                    },
-                    icon: Icon(Icons.date_range_outlined))
-              ]),
+                  return null;
+                },
+              ),
               SizedBox(
                 height: 30,
               ),
@@ -309,5 +349,68 @@ class _SingleListUseState extends State<SingleListUse> {
         ),
       ),
     );
+  }
+
+  int _selectedValue = 0;
+
+  void _showPicker(BuildContext ctx) {
+    showCupertinoModalBottomSheet(
+        context: ctx,
+        builder: (_) => Stack(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 250,
+                  child: CupertinoPicker(
+                    backgroundColor: Color.fromARGB(255, 230, 228, 228),
+                    itemExtent: 30,
+                    scrollController:
+                        FixedExtentScrollController(initialItem: 1),
+                    children: [
+                      Text('1 Days'),
+                      Text('3 Days'),
+                      Text('7 Days'),
+                      Text('2 Weeks'),
+                    ],
+                    onSelectedItemChanged: (value) {
+                      print(value);
+                      _selectedValue = value;
+
+                      print(_dateController.text);
+                      if (value == 0) {
+                        _dateController.text = "1 Days";
+                      } else if (value == 1) {
+                        _dateController.text = "3 Days";
+                      } else if (value == 2) {
+                        _dateController.text = "7 Days";
+                      } else if (value == 3) {
+                        _dateController.text = "2 Weeks";
+                      }
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ElevatedButton(
+                          onPressed: () {
+                            setState(() {});
+                            Navigator.pop(context);
+                          },
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                  Color.fromARGB(255, 152, 147, 147)),
+                              padding:
+                                  MaterialStateProperty.all(EdgeInsets.all(5)),
+                              textStyle: MaterialStateProperty.all(
+                                  TextStyle(fontSize: 12))),
+                          child: Text("Done")),
+                    ],
+                  ),
+                ),
+              ],
+            ));
   }
 }
