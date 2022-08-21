@@ -32,20 +32,21 @@ class Student1 {
 }
 
 class _SingleListUseState extends State<SingleListUse> {
-  List<Student1> _studentList = [];
+  List<Student1> _studentList = [Student1('', 1), Student1('', 2)];
   Map<int, Student1> _studentMap = {};
+
+  List<TextEditingController> controllrs = [
+    TextEditingController(),
+    TextEditingController(),
+  ];
+  TextEditingController controller = TextEditingController();
 
   void _addNewStudent() {
     setState(() {
+      print("max");
+
       _studentList.add(Student1('', 1));
     });
-  }
-
-  @override
-  void initState() {
-    _addNewStudent();
-    // TODO: implement initState
-    super.initState();
   }
 
   @override
@@ -116,6 +117,7 @@ class _SingleListUseState extends State<SingleListUse> {
                       itemCount: _studentMap.length,
                       itemBuilder: (context, position) {
                         print('Item Position $position');
+
                         return Padding(
                           padding: EdgeInsets.only(top: 5.0),
                           child: Column(
@@ -158,17 +160,30 @@ class _SingleListUseState extends State<SingleListUse> {
                                       ),
                                     ),
                                   ),
-                                  IconButton(
-                                    icon: Icon(
-                                      Icons.remove,
-                                      color: Colors.red,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _studentList.removeAt(position);
-                                      });
-                                    },
-                                  ),
+                                  (position == 0)
+                                      ? SizedBox()
+                                      : (position == 1)
+                                          ? SizedBox()
+                                          : (position + 1 ==
+                                                  _studentList.length)
+                                              ? IconButton(
+                                                  icon: Icon(
+                                                    Icons.delete,
+                                                    color: Colors.red,
+                                                  ),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      print("object");
+                                                      print(position);
+                                                      print("object");
+                                                      _studentList
+                                                          .removeAt(position);
+                                                      controllrs
+                                                          .remove(position);
+                                                    });
+                                                  },
+                                                )
+                                              : SizedBox(),
                                 ],
                               ),
                             ],
@@ -201,7 +216,18 @@ class _SingleListUseState extends State<SingleListUse> {
                       Icon(
                         Icons.add,
                       ),
-                      Text('Add option')
+                      GestureDetector(
+                          onTap: () {
+                            if (_studentList.length <= 5) {
+                              print("object");
+                              print("object");
+                              print("Length student" +
+                                  _studentList.length.toString());
+                              _addNewStudent();
+                              controllrs.add(TextEditingController());
+                            }
+                          },
+                          child: Text('Add option'))
                     ],
                   ),
                 ),
