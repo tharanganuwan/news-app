@@ -209,56 +209,83 @@ class _SingleListUseState extends State<SingleListUse> {
               SizedBox(
                 height: 20,
               ),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-                Text("Select End Date:"),
-                SizedBox(
-                  width: 10,
-                ),
-                SizedBox(
-                  width: 150,
-                  child: TextFormField(
-                    readOnly: true,
-                    textAlign: TextAlign.center,
-                    //keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                      hintText: 'date',
-                      //'${value.p_date.year}/${value.p_date.month}/${value.p_date.day}',
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Theme.of(context).primaryColor),
-                      ),
-                      hintStyle: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black.withOpacity(0.50),
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Please Enter Quection';
-                      }
+              // Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+              //   Text("Select End Date:"),
+              //   SizedBox(
+              //     width: 10,
+              //   ),
+              //   SizedBox(
+              //     width: 150,
+              //     child: TextFormField(
+              //       readOnly: true,
+              //       textAlign: TextAlign.center,
+              //       //keyboardType: TextInputType.text,
+              //       decoration: InputDecoration(
+              //         hintText: 'date',
+              //         //'${value.p_date.year}/${value.p_date.month}/${value.p_date.day}',
+              //         focusedBorder: UnderlineInputBorder(
+              //           borderSide:
+              //               BorderSide(color: Theme.of(context).primaryColor),
+              //         ),
+              //         hintStyle: TextStyle(
+              //           fontSize: 14,
+              //           color: Colors.black.withOpacity(0.50),
+              //         ),
+              //       ),
+              //       validator: (value) {
+              //         if (value!.isEmpty) {
+              //           return 'Please Enter Quection';
+              //         }
 
-                      return null;
-                    },
+              //         return null;
+              //       },
+              //     ),
+              //   ),
+              //   // Text(
+              //   //   '${date.year},${date.month},${date.month}',
+              //   //   style: TextStyle(letterSpacing: 2, fontSize: 15),
+              //   // ),
+              //   IconButton(
+              //       onPressed: () async {
+              //         DateTime? newDate = await showDatePicker(
+              //             context: context,
+              //             initialDate: DateTime(2022, 8, 30),
+              //             firstDate: DateTime(2021),
+              //             lastDate: DateTime(2030));
+
+              //         if (newDate == null) return;
+
+              //         setState(() => DateTime(2022, 8, 30));
+              //       },
+              //       icon: Icon(Icons.date_range_outlined))
+              // ]),
+              Text(
+                'Poll duration *',
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: 14,
+                ),
+              ),
+              TextFormField(
+                // controller: value.questionController,
+
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Enter Your Quection',
+                  hintStyle: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black.withOpacity(0.50),
                   ),
                 ),
-                // Text(
-                //   '${date.year},${date.month},${date.month}',
-                //   style: TextStyle(letterSpacing: 2, fontSize: 15),
-                // ),
-                IconButton(
-                    onPressed: () async {
-                      DateTime? newDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime(2022, 8, 30),
-                          firstDate: DateTime(2021),
-                          lastDate: DateTime(2030));
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please Enter Quection';
+                  }
 
-                      if (newDate == null) return;
-
-                      setState(() => DateTime(2022, 8, 30));
-                    },
-                    icon: Icon(Icons.date_range_outlined))
-              ]),
+                  return null;
+                },
+              ),
               SizedBox(
                 height: 30,
               ),
