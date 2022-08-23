@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'package:cybehawks/components/primary_button.dart';
 import 'package:cybehawks/models/news.dart';
-import 'package:cybehawks/pages/add_post_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

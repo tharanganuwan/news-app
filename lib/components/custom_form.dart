@@ -1,12 +1,8 @@
 import 'package:cybehawks/models/news.dart';
-import 'package:cybehawks/pages/add_poll_screen.dart';
 import 'package:cybehawks/pages/add_post_screen.dart';
 import 'package:cybehawks/pages/dynamic/dynamic_textfield.dart';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../controller/post_controller.dart';
 
 class ShowForm {
   static void showForm(BuildContext context, News? model) {

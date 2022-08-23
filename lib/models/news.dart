@@ -13,7 +13,7 @@ class News {
   //
   late final String? p_ispoll;
   late final String? p_question;
-  late final DateTime? p_enddate;
+  late DateTime? p_enddate;
   // final List<PollsModel>? p_polls;
 
   final List<String>? answer_ids;
@@ -23,6 +23,10 @@ class News {
   final List<String>? answer2_votes;
   final List<String>? answer3_votes;
   final List<String>? answer4_votes;
+  final List<String>? answer5_votes;
+  final List<String>? answer6_votes;
+
+  late final String answerSize;
 
   News({
     this.title = '',
@@ -46,30 +50,36 @@ class News {
     this.answer2_votes = const [],
     this.answer3_votes = const [],
     this.answer4_votes = const [],
+    this.answer5_votes = const [],
+    this.answer6_votes = const [],
+    this.answerSize = '0',
   });
   Map<String, dynamic> toJson() => {
         'comment': List<Comment>.from(comment!.map((e) => e.toJson())),
-        'description': description,
+        'description': description ?? "#",
         'id': id,
-        'image': image,
+        'image': image ?? "#",
         'like': List<String>.from(like!.map((e) => e)),
         'share': List<String>.from(share!.map((e) => e)),
-        'title': title,
-        'link': link,
+        'title': title ?? "#",
+        'link': link ?? "#",
         'publishedDate': publishedDate ?? DateTime.now(),
         //
-        'p_ispoll': p_ispoll,
-        'p_question': p_question,
+        'p_ispoll': p_ispoll ?? "#",
+        'p_question': p_question ?? "#",
         'p_enddate': p_enddate ?? DateTime.now(),
 
         // 'p_polls': List<PollsModel>.from(p_polls!.map((e) => e)),
-        "answer_ids": List<String>.from(like!.map((e) => e)),
-        "answer_texts": List<String>.from(like!.map((e) => e)),
+        "answer_ids": answer_ids ?? [],
+        "answer_texts": answer_texts ?? [],
         // "answer_votes": List<String>.from(like!.map((e) => e)),
-        "answer1_votes": List<String>.from(like!.map((e) => e)),
-        "answer2_votes": List<String>.from(like!.map((e) => e)),
-        "answer3_votes": List<String>.from(like!.map((e) => e)),
-        "answer4_votes": List<String>.from(like!.map((e) => e)),
+        "answer1_votes": answer1_votes ?? [],
+        "answer2_votes": answer2_votes ?? [],
+        "answer3_votes": answer3_votes ?? [],
+        "answer4_votes": answer4_votes ?? [],
+        "answer5_votes": answer5_votes ?? [],
+        "answer6_votes": answer6_votes ?? [],
+        'answerSize': answerSize,
       };
 
   static News fromJson(Map<String, dynamic> json) => News(
@@ -91,23 +101,21 @@ class News {
         p_enddate: ((json['p_enddate']) == null)
             ? (DateTime.now())
             : ((json['p_enddate'] as Timestamp).toDate()),
-        // p_polls: ((json['p_polls']) == null)
-        //     ? (null)
-        //     : List<PollsModel>.from(
-        //         json["p_polls"].map((x) => PollsModel.fromJson(x))),
+
         answer_ids: ((json['answer_ids']) == null)
             ? (null)
             : List<String>.from(json["answer_ids"].map((x) => x)),
         answer_texts: ((json['answer_texts']) == null)
             ? (null)
             : List<String>.from(json["answer_texts"].map((x) => x)),
-        // answer_votes: ((json['answer_votes']) == null)
-        //     ? (null)
-        //     : List<String>.from(json["answer_votes"].map((x) => x)),
+
         answer1_votes: List<String>.from(json['answer1_votes'].map((x) => x)),
         answer2_votes: List<String>.from(json['answer2_votes'].map((x) => x)),
         answer3_votes: List<String>.from(json['answer3_votes'].map((x) => x)),
         answer4_votes: List<String>.from(json['answer4_votes'].map((x) => x)),
+        answer5_votes: List<String>.from(json['answer5_votes'].map((x) => x)),
+        answer6_votes: List<String>.from(json['answer6_votes'].map((x) => x)),
+        answerSize: json['answerSize'],
       );
 }
 

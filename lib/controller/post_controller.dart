@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cybehawks/pages/dynamic/dynamic_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cybehawks/models/news.dart';
 import 'package:flutter/material.dart';
@@ -9,77 +10,288 @@ import 'package:http/http.dart' as http;
 import 'package:xml/xml.dart' as xml;
 
 class PostController extends ChangeNotifier {
+  bool islording = false;
+  void setLording(bool a) {
+    islording = a;
+  }
+
   TextEditingController _questionController = TextEditingController();
-  TextEditingController _ans1Controller = TextEditingController();
-  TextEditingController _ans2Controller = TextEditingController();
-  TextEditingController _ans3Controller = TextEditingController();
-  TextEditingController _ans4Controller = TextEditingController();
   DateTime _p_date = DateTime.now();
 
   TextEditingController get questionController => _questionController;
-  TextEditingController get ans1Controller => _ans1Controller;
-  TextEditingController get ans2Controller => _ans2Controller;
-  TextEditingController get ans3Controller => _ans3Controller;
-  TextEditingController get ans4Controller => _ans4Controller;
   DateTime get p_date => _p_date;
-  void setdate(DateTime d) {
-    _p_date = d;
+  List<Student1> studentList = [Student1('', 1), Student1('', 2)];
+  Map<int, Student1> studentMap = {};
+
+  List<TextEditingController> controllrs = [
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+  ];
+
+  String an1 = "a";
+  String an2 = "b";
+  String an3 = "c";
+  String an4 = "d";
+  String an5 = "e";
+  String an6 = "f";
+
+  void setAnswers() {
+    print(studentList.length);
+    if (studentList.length == 2) {
+      an1 = controllrs[0].text.toString();
+      an2 = controllrs[1].text.toString();
+    } else if (studentList.length == 3) {
+      an1 = controllrs[0].text.toString();
+      an2 = controllrs[1].text.toString();
+      an3 = controllrs[2].text.toString();
+    } else if (studentList.length == 4) {
+      an1 = controllrs[0].text.toString();
+      an2 = controllrs[1].text.toString();
+      an3 = controllrs[2].text.toString();
+      an4 = controllrs[3].text.toString();
+    } else if (studentList.length == 5) {
+      an1 = controllrs[0].text.toString();
+      an2 = controllrs[1].text.toString();
+      an3 = controllrs[2].text.toString();
+      an4 = controllrs[3].text.toString();
+      an5 = controllrs[4].text.toString();
+    } else if (studentList.length == 6) {
+      an1 = controllrs[0].text.toString();
+      an2 = controllrs[1].text.toString();
+      an3 = controllrs[2].text.toString();
+      an4 = controllrs[3].text.toString();
+      an5 = controllrs[4].text.toString();
+      an6 = controllrs[5].text.toString();
+    } else {
+      print("not set");
+    }
+  }
+
+  // bool viewR = false;
+  // void viewResult() {
+  //   viewR = !viewR;
+  //   print(viewR);
+  // }
+
+  TextEditingController dateController = TextEditingController();
+
+  void setdate(int d) {
+    _p_date = _p_date.add(new Duration(days: d));
   }
 
   bool pollvalidate() {
     bool validate = false;
     if (_questionController.text.isEmpty ||
-        _ans1Controller.text.isEmpty ||
-        _ans2Controller.text.isEmpty ||
-        _ans3Controller.text.isEmpty ||
-        _ans4Controller.text.isEmpty) {
+        controllrs[0].text.isEmpty ||
+        controllrs[1].text.isEmpty) {
       validate = false;
-    } else if (_ans1Controller.text == _ans2Controller.text ||
-        _ans1Controller.text == _ans3Controller.text ||
-        _ans1Controller.text == _ans4Controller.text ||
-        _ans2Controller.text == _ans3Controller.text ||
-        _ans2Controller.text == _ans4Controller.text ||
-        _ans3Controller.text == _ans4Controller.text) {
+      setLording(false);
+    } else if (controllrs[0].text == controllrs[1].text) {
       validate = false;
+      setLording(false);
     } else {
       validate = true;
     }
+    notifyListeners();
     return validate;
   }
 
   News? toPostpoll;
-  // List<News>? _allpost;
-  // List<News>? get allpost => _allpost;
+
+  void clearColnrollers() {
+    an1 = "a";
+    an2 = "b";
+    an3 = "c";
+    an4 = "d";
+    an5 = "e";
+    an6 = "f";
+
+    dateController.clear();
+    questionController.clear();
+
+    studentList = [Student1('', 1), Student1('', 2)];
+    studentMap = {};
+
+    controllrs[0].clear();
+    controllrs[1].clear();
+    controllrs[2].clear();
+    controllrs[3].clear();
+    controllrs[4].clear();
+    controllrs[5].clear();
+  }
+
+  void updatePoll(String newsId) async {
+    final toPostpoll = News(
+        id: newsId,
+        p_question: _questionController.text.toString(),
+        p_enddate: _p_date,
+        answer_texts: ["$an1", "$an2", "$an3", "$an4", "$an5", "$an6"],
+        answer_ids: ["1", "2", "3", "4", "5", "6"],
+        answerSize: studentList.length.toString(),
+        p_ispoll: "yes");
+    await _firestore.collection('news').doc(newsId).set(toPostpoll.toJson());
+
+    // await docpolls.set(toPostpoll.toJson());
+    print("Poll updated");
+
+    // await FirebaseFirestore.instance.collection("news").doc(docpolls.id).set({
+    //   "answer_ids": FieldValue.arrayUnion(["1", "2", "3", "4", "5", "6"]),
+    //   "answer_texts": FieldValue.arrayUnion([an1, an2, an3, an4, an5, an6]),
+    // }, SetOptions(merge: true));
+  }
+
   void postPoll() async {
     final docpolls = _firestore.collection('news').doc();
     final toPostpoll = News(
       id: docpolls.id,
-      p_question: _questionController.text,
+      description: "description",
+      // like: [],
+      link: "news.link",
+      image: "news.image",
+      publishedDate: DateTime.now(),
+      title: "news.title",
+      p_question: _questionController.text.toString(),
       p_enddate: _p_date,
       p_ispoll: "yes",
-      answer_ids: [],
-      answer_texts: [
-        _ans1Controller.text,
-        _ans2Controller.text,
-        _ans3Controller.text,
-        _ans4Controller.text,
-      ],
-      answer1_votes: [],
-      answer2_votes: [],
-      answer3_votes: [],
-      answer4_votes: [],
+      // answer1_votes: [],
+      // answer2_votes: [],
+      // answer3_votes: [],
+      // answer4_votes: [],
+      // answer5_votes: [],
+      // answer6_votes: [],
+      answer_ids: ["1", "2", "3", "4", "5", "6"],
+      answer_texts: ["$an1", "$an2", "$an3", "$an4", "$an5", "$an6"],
+      // answer_texts: ["an1", "an2", "an3", "an4", "an5", "an6"],
+      // comment: [],
+      // share: [],
+      answerSize: studentList.length.toString(),
     );
 
     await docpolls.set(toPostpoll.toJson());
-    await FirebaseFirestore.instance.collection("news").doc(docpolls.id).set({
-      "answer_ids": FieldValue.arrayUnion(["1", "2", "3", "4"]),
-      "answer_texts": FieldValue.arrayUnion([
-        _ans1Controller.text,
-        _ans2Controller.text,
-        _ans3Controller.text,
-        _ans4Controller.text,
-      ]),
-    }, SetOptions(merge: true));
+    print("Poll Id ${docpolls.id}");
+
+    // await FirebaseFirestore.instance.collection("news").doc(docpolls.id).set({
+    //   "answer_ids": FieldValue.arrayUnion(["1", "2", "3", "4", "5", "6"]),
+    //   "answer_texts": FieldValue.arrayUnion([an1, an2, an3, an4, an5, an6]),
+    // }, SetOptions(merge: true));
+  }
+
+  setControllersUpdate(News? n) {
+    if (n != null) {
+      questionController.text = n.p_question!;
+      controllrs[0].text = n.answer_texts![0].toString();
+      controllrs[1].text = n.answer_texts![1].toString();
+      controllrs[2].text = n.answer_texts![2].toString();
+      controllrs[3].text = n.answer_texts![3].toString();
+      controllrs[4].text = n.answer_texts![4].toString();
+      controllrs[5].text = n.answer_texts![5].toString();
+    }
+    if (n!.answerSize == "2") {
+      studentList = [
+        Student1('', 1),
+        Student1('', 2),
+      ];
+    } else if (n.answerSize == "3") {
+      studentList = [
+        Student1('', 1),
+        Student1('', 2),
+        Student1('', 3),
+      ];
+    } else if (n.answerSize == "4") {
+      studentList = [
+        Student1('', 1),
+        Student1('', 2),
+        Student1('', 3),
+        Student1('', 4),
+      ];
+    } else if (n.answerSize == "5") {
+      studentList = [
+        Student1('', 1),
+        Student1('', 2),
+        Student1('', 3),
+        Student1('', 4),
+        Student1('', 5),
+      ];
+    } else if (n.answerSize == "6") {
+      studentList = [
+        Student1('', 1),
+        Student1('', 2),
+        Student1('', 3),
+        Student1('', 4),
+        Student1('', 5),
+        Student1('', 6),
+      ];
+
+      dateController.text = n.p_enddate!.day.toString();
+    }
+  }
+
+  // bool isVoted = false;
+  // Future<void> isVotated(String userId, String newsId) async {
+  //   var x = await _firestore.collection('news').doc(newsId).get();
+  //   List<dynamic> answer1_votes = x['answer1_votes'];
+  //   List<dynamic> answer2_votes = x['answer2_votes'];
+  //   List<dynamic> answer3_votes = x['answer3_votes'];
+  //   List<dynamic> answer4_votes = x['answer4_votes'];
+  //   List<dynamic> answer5_votes = x['answer5_votes'];
+  //   List<dynamic> answer6_votes = x['answer6_votes'];
+  //   if (answer1_votes.contains(userId) ||
+  //       answer2_votes.contains(userId) ||
+  //       answer3_votes.contains(userId) ||
+  //       answer4_votes.contains(userId) ||
+  //       answer5_votes.contains(userId) ||
+  //       answer6_votes.contains(userId)) {
+  //     isVoted = true;
+  //     print("true");
+  //     print(newsId);
+  //   } else {
+  //     isVoted = false;
+  //     print('False');
+  //   }
+  // }
+  //List<String> votedNews=[]
+
+  Future<void> undovote(
+    String userId,
+    String newsId,
+  ) async {
+    var x = await _firestore.collection('news').doc(newsId).get();
+    List<dynamic> answer1_votes = x['answer1_votes'];
+    List<dynamic> answer2_votes = x['answer2_votes'];
+    List<dynamic> answer3_votes = x['answer3_votes'];
+    List<dynamic> answer4_votes = x['answer4_votes'];
+    List<dynamic> answer5_votes = x['answer5_votes'];
+    List<dynamic> answer6_votes = x['answer6_votes'];
+
+    if (answer1_votes.contains(userId)) {
+      await FirebaseFirestore.instance.collection("news").doc(newsId).set({
+        "answer1_votes": FieldValue.arrayRemove([userId])
+      }, SetOptions(merge: true));
+    } else if (answer2_votes.contains(userId)) {
+      await FirebaseFirestore.instance.collection("news").doc(newsId).set({
+        "answer2_votes": FieldValue.arrayRemove([userId])
+      }, SetOptions(merge: true));
+    } else if (answer3_votes.contains(userId)) {
+      await FirebaseFirestore.instance.collection("news").doc(newsId).set({
+        "answer3_votes": FieldValue.arrayRemove([userId])
+      }, SetOptions(merge: true));
+    } else if (answer4_votes.contains(userId)) {
+      await FirebaseFirestore.instance.collection("news").doc(newsId).set({
+        "answer4_votes": FieldValue.arrayRemove([userId])
+      }, SetOptions(merge: true));
+    } else if (answer5_votes.contains(userId)) {
+      await FirebaseFirestore.instance.collection("news").doc(newsId).set({
+        "answer5_votes": FieldValue.arrayRemove([userId])
+      }, SetOptions(merge: true));
+    } else if (answer6_votes.contains(userId)) {
+      await FirebaseFirestore.instance.collection("news").doc(newsId).set({
+        "answer6_votes": FieldValue.arrayRemove([userId])
+      }, SetOptions(merge: true));
+    }
   }
 
   void addvote(
@@ -92,11 +304,15 @@ class PostController extends ChangeNotifier {
     List<dynamic> answer2_votes = x['answer2_votes'];
     List<dynamic> answer3_votes = x['answer3_votes'];
     List<dynamic> answer4_votes = x['answer4_votes'];
+    List<dynamic> answer5_votes = x['answer5_votes'];
+    List<dynamic> answer6_votes = x['answer6_votes'];
 
     if (answer1_votes.contains(userId) ||
         answer2_votes.contains(userId) ||
         answer3_votes.contains(userId) ||
-        answer4_votes.contains(userId)) {
+        answer4_votes.contains(userId) ||
+        answer5_votes.contains(userId) ||
+        answer6_votes.contains(userId)) {
       print("alrady vatedd");
     } else {
       if (id == 1) {
@@ -114,6 +330,14 @@ class PostController extends ChangeNotifier {
       } else if (id == 4) {
         await FirebaseFirestore.instance.collection("news").doc(newsId).set({
           "answer4_votes": FieldValue.arrayUnion([userId])
+        }, SetOptions(merge: true));
+      } else if (id == 5) {
+        await FirebaseFirestore.instance.collection("news").doc(newsId).set({
+          "answer5_votes": FieldValue.arrayUnion([userId])
+        }, SetOptions(merge: true));
+      } else if (id == 6) {
+        await FirebaseFirestore.instance.collection("news").doc(newsId).set({
+          "answer6_votes": FieldValue.arrayUnion([userId])
         }, SetOptions(merge: true));
       } else {
         print("Error");

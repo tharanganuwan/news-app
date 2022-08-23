@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cybehawks/auth/auth_bloc.dart';
 import 'package:cybehawks/controller/post_controller.dart';
 import 'package:cybehawks/models/news.dart';
+import 'package:cybehawks/pages/add_post_screen.dart';
 import 'package:cybehawks/pages/comments_screen.dart';
+import 'package:cybehawks/pages/dynamic/dynamic_textfield.dart';
 import 'package:cybehawks/pages/home.dart';
 import 'package:cybehawks/pages/login.dart';
 import 'package:cybehawks/pages/news_detail.dart';
@@ -12,50 +14,268 @@ import 'package:flutter_polls/flutter_polls.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-class NewsCard extends StatelessWidget {
+class NewsCard extends StatefulWidget {
   final News news;
 
   const NewsCard({Key? key, required this.news}) : super(key: key);
 
   @override
+  State<NewsCard> createState() => _NewsCardState();
+}
+
+class _NewsCardState extends State<NewsCard> {
   Widget build(BuildContext context) {
-    // PollsModel model = PollsModel(id: "1", title: "Test", votes: "50");
+    List<String>? answer1_votes = widget.news.answer1_votes;
+    List<String>? answer2_votes = widget.news.answer2_votes;
+    List<String>? answer3_votes = widget.news.answer1_votes;
+    List<String>? answer4_votes = widget.news.answer1_votes;
+    List<String>? answer5_votes = widget.news.answer1_votes;
+    List<String>? answer6_votes = widget.news.answer1_votes;
+
+    bool isVoted() {
+      bool a = false;
+      if (FirebaseAuth.instance.currentUser != null) {
+        String uid = FirebaseAuth.instance.currentUser!.uid;
+
+        if (answer1_votes!.contains(uid) ||
+            answer2_votes!.contains(uid) ||
+            answer3_votes!.contains(uid) ||
+            answer4_votes!.contains(uid) ||
+            answer5_votes!.contains(uid) ||
+            answer6_votes!.contains(uid)) {
+          a = true;
+          print("true");
+        } else {
+          a = false;
+          print('False');
+        }
+      }
+      return a;
+    }
+
+    // // PollsModel model = PollsModel(id: "1", title: "Test", votes: "50");
     // PollsModel model2 = PollsModel(id: "2", title: "Test2", votes: "60");
     // List<PollsModel> listp = [model, model2];
     // News? newsPoll =
     //     Provider.of<PostController>(context, listen: false).toPostpoll;
-
-    List polls() => [
+    List polls1() => [
           {
             'id': 1,
-            'question': news.p_question,
-            'end_date': news.p_enddate,
+            'question': widget.news.p_question,
+            'end_date': widget.news.p_enddate,
             'options': [
               {
-                'id': int.parse(news.answer_ids![0].toString()),
-                'title': news.answer_texts![0].toString(),
-                'votes': int.parse(news.answer1_votes!.length.toString()),
+                'id': int.parse(widget.news.answer_ids![0].toString()),
+                'title': widget.news.answer_texts![0].toString(),
+                'votes':
+                    int.parse(widget.news.answer1_votes!.length.toString()),
               },
               {
-                'id': int.parse(news.answer_ids![1].toString()),
-                'title': news.answer_texts![1].toString(),
-                'votes': int.parse(news.answer2_votes!.length.toString()),
+                'id': int.parse(widget.news.answer_ids![1].toString()),
+                'title': widget.news.answer_texts![1].toString(),
+                'votes':
+                    int.parse(widget.news.answer2_votes!.length.toString()),
+              },
+            ],
+          },
+        ];
+    List polls2() => [
+          {
+            'id': 1,
+            'question': widget.news.p_question,
+            'end_date': widget.news.p_enddate,
+            'options': [
+              {
+                'id': int.parse(widget.news.answer_ids![0].toString()),
+                'title': widget.news.answer_texts![0].toString(),
+                'votes':
+                    int.parse(widget.news.answer1_votes!.length.toString()),
               },
               {
-                'id': int.parse(news.answer_ids![2].toString()),
-                'title': news.answer_texts![2].toString(),
-                'votes': int.parse(news.answer3_votes!.length.toString()),
+                'id': int.parse(widget.news.answer_ids![1].toString()),
+                'title': widget.news.answer_texts![1].toString(),
+                'votes':
+                    int.parse(widget.news.answer2_votes!.length.toString()),
               },
               {
-                'id': int.parse(news.answer_ids![3].toString()),
-                'title': news.answer_texts![3].toString(),
-                'votes': int.parse(news.answer4_votes!.length.toString()),
+                'id': int.parse(widget.news.answer_ids![2].toString()),
+                'title': widget.news.answer_texts![2].toString(),
+                'votes':
+                    int.parse(widget.news.answer3_votes!.length.toString()),
+              },
+            ],
+          },
+        ];
+    List polls3() => [
+          {
+            'id': 1,
+            'question': widget.news.p_question,
+            'end_date': widget.news.p_enddate,
+            'options': [
+              {
+                'id': int.parse(widget.news.answer_ids![0].toString()),
+                'title': widget.news.answer_texts![0].toString(),
+                'votes':
+                    int.parse(widget.news.answer1_votes!.length.toString()),
+              },
+              {
+                'id': int.parse(widget.news.answer_ids![1].toString()),
+                'title': widget.news.answer_texts![1].toString(),
+                'votes':
+                    int.parse(widget.news.answer2_votes!.length.toString()),
+              },
+              {
+                'id': int.parse(widget.news.answer_ids![2].toString()),
+                'title': widget.news.answer_texts![2].toString(),
+                'votes':
+                    int.parse(widget.news.answer3_votes!.length.toString()),
+              },
+              {
+                'id': int.parse(widget.news.answer_ids![3].toString()),
+                'title': widget.news.answer_texts![3].toString(),
+                'votes':
+                    int.parse(widget.news.answer4_votes!.length.toString()),
+              },
+            ],
+          },
+        ];
+    List polls4() => [
+          {
+            'id': 1,
+            'question': widget.news.p_question,
+            'end_date': widget.news.p_enddate,
+            'options': [
+              {
+                'id': int.parse(widget.news.answer_ids![0].toString()),
+                'title': widget.news.answer_texts![0].toString(),
+                'votes':
+                    int.parse(widget.news.answer1_votes!.length.toString()),
+              },
+              {
+                'id': int.parse(widget.news.answer_ids![1].toString()),
+                'title': widget.news.answer_texts![1].toString(),
+                'votes':
+                    int.parse(widget.news.answer2_votes!.length.toString()),
+              },
+              {
+                'id': int.parse(widget.news.answer_ids![2].toString()),
+                'title': widget.news.answer_texts![2].toString(),
+                'votes':
+                    int.parse(widget.news.answer3_votes!.length.toString()),
+              },
+              {
+                'id': int.parse(widget.news.answer_ids![3].toString()),
+                'title': widget.news.answer_texts![3].toString(),
+                'votes':
+                    int.parse(widget.news.answer4_votes!.length.toString()),
+              },
+              {
+                'id': int.parse(widget.news.answer_ids![4].toString()),
+                'title': widget.news.answer_texts![4].toString(),
+                'votes':
+                    int.parse(widget.news.answer5_votes!.length.toString()),
+              },
+            ],
+          },
+        ];
+    List polls5() => [
+          {
+            'id': 1,
+            'question': widget.news.p_question,
+            'end_date': widget.news.p_enddate,
+            'options': [
+              {
+                'id': int.parse(widget.news.answer_ids![0].toString()),
+                'title': widget.news.answer_texts![0].toString(),
+                'votes':
+                    int.parse(widget.news.answer1_votes!.length.toString()),
+              },
+              {
+                'id': int.parse(widget.news.answer_ids![1].toString()),
+                'title': widget.news.answer_texts![1].toString(),
+                'votes':
+                    int.parse(widget.news.answer2_votes!.length.toString()),
+              },
+              {
+                'id': int.parse(widget.news.answer_ids![2].toString()),
+                'title': widget.news.answer_texts![2].toString(),
+                'votes':
+                    int.parse(widget.news.answer3_votes!.length.toString()),
+              },
+              {
+                'id': int.parse(widget.news.answer_ids![3].toString()),
+                'title': widget.news.answer_texts![3].toString(),
+                'votes':
+                    int.parse(widget.news.answer4_votes!.length.toString()),
+              },
+              {
+                'id': int.parse(widget.news.answer_ids![4].toString()),
+                'title': widget.news.answer_texts![4].toString(),
+                'votes':
+                    int.parse(widget.news.answer5_votes!.length.toString()),
+              },
+              {
+                'id': int.parse(widget.news.answer_ids![5].toString()),
+                'title': widget.news.answer_texts![5].toString(),
+                'votes':
+                    int.parse(widget.news.answer6_votes!.length.toString()),
               },
             ],
           },
         ];
 
-    return (news.p_ispoll == "yes" || news.p_ispoll == null)
+    List pols() => [
+          {
+            'id': 1,
+            'question': widget.news.p_question,
+            'end_date': widget.news.p_enddate,
+            'options': [
+              {
+                'id': int.parse(widget.news.answer_ids![0].toString()),
+                'title': widget.news.answer_texts![0].toString(),
+                'votes':
+                    int.parse(widget.news.answer1_votes!.length.toString()),
+              },
+              {
+                'id': int.parse(widget.news.answer_ids![1].toString()),
+                'title': widget.news.answer_texts![1].toString(),
+                'votes':
+                    int.parse(widget.news.answer2_votes!.length.toString()),
+              },
+              {
+                'id': int.parse(widget.news.answer_ids![2].toString()),
+                'title': widget.news.answer_texts![2].toString(),
+                'votes':
+                    int.parse(widget.news.answer3_votes!.length.toString()),
+              },
+              {
+                'id': int.parse(widget.news.answer_ids![3].toString()),
+                'title': widget.news.answer_texts![3].toString(),
+                'votes':
+                    int.parse(widget.news.answer4_votes!.length.toString()),
+              },
+            ],
+          },
+        ];
+    bool pollended = true;
+    //bool pollVoted = false;
+
+    //Provider.of<PostController>(context,listen: false).
+    double ss = double.parse(
+        widget.news.answerSize); //MediaQuery.of(context).size.height / 3;
+    if (ss == 2) {
+      ss = 220;
+    } else if (ss == 3) {
+      ss = 260;
+    } else if (ss == 4) {
+      ss = 310;
+    } else if (ss == 5) {
+      ss = 360;
+    } else if (ss == 6) {
+      ss = 400;
+    }
+
+    return (widget.news.p_ispoll == "yes" || widget.news.p_ispoll == null)
         // ? Container(
         //     height: 100,
         //     width: 100,
@@ -70,14 +290,32 @@ class NewsCard extends StatelessWidget {
                         //  color: Colors.amber,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 8),
-                        height: MediaQuery.of(context).size.height / 3,
+                        height: ss,
                         //padding: const EdgeInsets.all(20),
                         child: Center(
                           child: ListView.builder(
                             physics: NeverScrollableScrollPhysics(),
-                            itemCount: polls().length,
+                            // itemCount: polls().length,
+                            itemCount: (widget.news.answerSize == "2")
+                                ? polls1().length
+                                : (widget.news.answerSize == "3")
+                                    ? polls2().length
+                                    : (widget.news.answerSize == "4")
+                                        ? polls3().length
+                                        : (widget.news.answerSize == "5")
+                                            ? polls4().length
+                                            : polls5().length,
                             itemBuilder: (BuildContext context, int index) {
-                              final Map<String, dynamic> poll = polls()[index];
+                              final Map<String, dynamic> poll =
+                                  (widget.news.answerSize == "2")
+                                      ? polls1()[0]
+                                      : (widget.news.answerSize == "3")
+                                          ? polls2()[0]
+                                          : (widget.news.answerSize == "4")
+                                              ? polls3()[0]
+                                              : (widget.news.answerSize == "5")
+                                                  ? polls4()[0]
+                                                  : polls5()[0];
 
                               final int days = DateTime(
                                 poll['end_date'].year,
@@ -95,23 +333,34 @@ class NewsCard extends StatelessWidget {
                                 //   color: Colors.red,
                                 //margin: const EdgeInsets.only(bottom: 20),
                                 child: FlutterPolls(
+                                  userVotedOptionId: 1,
                                   pollId: poll['id'].toString(),
                                   // hasVoted: hasVoted.value,
                                   // userVotedOptionId: userVotedOptionId.value,
                                   onVoted: (PollOption pollOption,
                                       int newTotalVotes) async {
-                                    print(pollOption.id);
-                                    value.addvote(
-                                        FirebaseAuth.instance.currentUser!.uid,
-                                        news.id!,
-                                        pollOption.id!);
-                                    await Future.delayed(
-                                        const Duration(seconds: 2));
+                                    if (FirebaseAuth.instance.currentUser ==
+                                        null) {
+                                      context
+                                          .read<AuthBloc>()
+                                          .add(AuthLoginEvent());
+                                      return false;
+                                    } else {
+                                      print(pollOption.id);
+                                      value.addvote(
+                                          FirebaseAuth
+                                              .instance.currentUser!.uid,
+                                          widget.news.id!,
+                                          pollOption.id!);
+                                      await Future.delayed(
+                                          const Duration(seconds: 2));
 
-                                    /// If HTTP status is success, return true else false
-                                    return true;
+                                      /// If HTTP status is success, return true else false
+                                      return true;
+                                    }
                                   },
                                   pollEnded: days < 0,
+                                  hasVoted: isVoted(),
                                   pollTitle: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
@@ -122,6 +371,7 @@ class NewsCard extends StatelessWidget {
                                       ),
                                     ),
                                   ),
+
                                   pollOptions: List<PollOption>.from(
                                     poll['options'].map(
                                       (option) {
@@ -144,32 +394,108 @@ class NewsCard extends StatelessWidget {
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
                                   ),
-                                  metaWidget: Row(
-                                    children: [
-                                      const SizedBox(width: 6),
-                                      const Text(
-                                        '•',
-                                      ),
-                                      const SizedBox(
-                                        width: 6,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            days < 0
-                                                ? "ended"
-                                                : "ends $days days",
-                                          ),
-                                          Text("View Result"),
-                                          SizedBox(width: 10),
-                                          Text("Undo"),
-                                          SizedBox(width: 10),
-                                          Text("VDelete"),
-                                          SizedBox(width: 10),
-                                          Text("Edit"),
-                                        ],
-                                      ),
-                                    ],
+                                  metaWidget: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      children: [
+                                        const SizedBox(width: 6),
+                                        const Text(
+                                          '•',
+                                        ),
+                                        const SizedBox(
+                                          width: 6,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              days < 0
+                                                  ? "ended"
+                                                  : "ends $days days",
+                                            ),
+                                            // GestureDetector(
+                                            //     onTap: () {
+                                            //       //   value.isVotated(
+                                            //       //       FirebaseAuth.instance
+                                            //       //           .currentUser!.uid,
+                                            //       //       widget.news.id
+                                            //       //           .toString());
+                                            //       //   setState(() {
+                                            //       //     Navigator.of(context).push(
+                                            //       //         MaterialPageRoute(
+                                            //       //             builder: (context) {
+                                            //       //       return HomeScreen();
+                                            //       //     }));
+                                            //       //   });
+                                            //     },
+                                            //     child: Text(" View Result")),
+                                            SizedBox(width: 15),
+                                            (FirebaseAuth.instance.currentUser
+                                                            ?.email ==
+                                                        'sankha97@gmail.com' ||
+                                                    FirebaseAuth
+                                                            .instance
+                                                            .currentUser
+                                                            ?.email ==
+                                                        "rocketnuwan30@gmail.com")
+                                                ? GestureDetector(
+                                                    onTap: () {
+                                                      value.undovote(
+                                                          FirebaseAuth.instance
+                                                              .currentUser!.uid,
+                                                          widget.news.id
+                                                              .toString());
+                                                      Navigator.of(context).push(
+                                                          MaterialPageRoute(
+                                                              builder:
+                                                                  (context) {
+                                                        return HomeScreen();
+                                                      }));
+                                                    },
+                                                    child: Text("Undo"))
+                                                : SizedBox(),
+                                            SizedBox(width: 15),
+                                            (FirebaseAuth.instance.currentUser
+                                                            ?.email ==
+                                                        'sankha97@gmail.com' ||
+                                                    FirebaseAuth
+                                                            .instance
+                                                            .currentUser
+                                                            ?.email ==
+                                                        "rocketnuwan30@gmail.com")
+                                                ? GestureDetector(
+                                                    onTap: () {
+                                                      value.deleteNews(widget
+                                                          .news.id
+                                                          .toString());
+                                                    },
+                                                    child: Text("Delete"))
+                                                : SizedBox(),
+                                            SizedBox(width: 15),
+                                            (FirebaseAuth.instance.currentUser
+                                                            ?.email ==
+                                                        'sankha97@gmail.com' ||
+                                                    FirebaseAuth
+                                                            .instance
+                                                            .currentUser
+                                                            ?.email ==
+                                                        "rocketnuwan30@gmail.com")
+                                                ? GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.of(context)
+                                                          .push(
+                                                        MaterialPageRoute(
+                                                            builder: (_) =>
+                                                                SingleListUse(
+                                                                    model: widget
+                                                                        .news)),
+                                                      );
+                                                    },
+                                                    child: Text("Edit"))
+                                                : SizedBox(),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               );
@@ -196,7 +522,7 @@ class NewsCard extends StatelessWidget {
                                     }
                                     Share.share(
                                       '''CybeHawks Cyber Update you may be interested in ''' +
-                                          news.link!,
+                                          widget.news.link!,
                                       subject:
                                           'CybeHawks Cyber Update you may be interested in',
                                     );
@@ -219,7 +545,7 @@ class NewsCard extends StatelessWidget {
                                       context,
                                       MaterialPageRoute(
                                         builder: (_) =>
-                                            CommentsScreen(news: news),
+                                            CommentsScreen(news: widget.news),
                                       ),
                                     );
                                   },
@@ -231,9 +557,10 @@ class NewsCard extends StatelessWidget {
                                           Theme.of(context).primaryColor,
                                     ),
                                   ),
-                                  label: (news.comment!.length > 0)
+                                  label: (widget.news.comment!.length > 0)
                                       ? Text(
-                                          news.comment!.length.toString(),
+                                          widget.news.comment!.length
+                                              .toString(),
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
@@ -247,7 +574,7 @@ class NewsCard extends StatelessWidget {
                             StreamBuilder(
                               stream: FirebaseFirestore.instance
                                   .collection('news')
-                                  .doc(news.id)
+                                  .doc(widget.news.id)
                                   .snapshots(),
                               builder: (context, AsyncSnapshot snapshot) {
                                 bool liked = false;
@@ -284,7 +611,7 @@ class NewsCard extends StatelessWidget {
                                                 context,
                                                 listen: false)
                                             .toggleLike(
-                                          news.id!,
+                                          widget.news.id!,
                                           FirebaseAuth
                                               .instance.currentUser!.uid,
                                         );
@@ -338,7 +665,7 @@ class NewsCard extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (_) => NewsDetails(
-                    url: news.link!,
+                    url: widget.news.link!,
                   ),
                 ),
               );
@@ -346,11 +673,11 @@ class NewsCard extends StatelessWidget {
             child: Card(
               child: Column(
                 children: [
-                  news.image != null
+                  widget.news.image != null
                       ? Hero(
-                          tag: news.title!,
+                          tag: widget.news.title!,
                           child: Image.network(
-                            news.image!,
+                            widget.news.image!,
                             height: 150,
                             width: double.infinity,
                             fit: BoxFit.cover,
@@ -364,7 +691,7 @@ class NewsCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          news.publishedDate.toString(),
+                          widget.news.publishedDate.toString(),
                           style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w900,
@@ -375,7 +702,7 @@ class NewsCard extends StatelessWidget {
                           height: 4,
                         ),
                         Text(
-                          news.title!,
+                          widget.news.title!,
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w900,
@@ -385,7 +712,7 @@ class NewsCard extends StatelessWidget {
                           height: 8,
                         ),
                         Text(
-                          news.description!,
+                          widget.news.description!,
                           style: const TextStyle(
                             fontSize: 14,
                           ),
@@ -407,7 +734,7 @@ class NewsCard extends StatelessWidget {
                                     }
                                     Share.share(
                                       '''CybeHawks Cyber Update you may be interested in ''' +
-                                          news.link!,
+                                          widget.news.link!,
                                       subject:
                                           'CybeHawks Cyber Update you may be interested in',
                                     );
@@ -430,7 +757,7 @@ class NewsCard extends StatelessWidget {
                                       context,
                                       MaterialPageRoute(
                                         builder: (_) =>
-                                            CommentsScreen(news: news),
+                                            CommentsScreen(news: widget.news),
                                       ),
                                     );
                                   },
@@ -442,9 +769,10 @@ class NewsCard extends StatelessWidget {
                                           Theme.of(context).primaryColor,
                                     ),
                                   ),
-                                  label: (news.comment!.length > 0)
+                                  label: (widget.news.comment!.length > 0)
                                       ? Text(
-                                          news.comment!.length.toString(),
+                                          widget.news.comment!.length
+                                              .toString(),
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
@@ -458,7 +786,7 @@ class NewsCard extends StatelessWidget {
                             StreamBuilder(
                               stream: FirebaseFirestore.instance
                                   .collection('news')
-                                  .doc(news.id)
+                                  .doc(widget.news.id)
                                   .snapshots(),
                               builder: (context, AsyncSnapshot snapshot) {
                                 bool liked = false;
@@ -495,7 +823,7 @@ class NewsCard extends StatelessWidget {
                                                 context,
                                                 listen: false)
                                             .toggleLike(
-                                          news.id!,
+                                          widget.news.id!,
                                           FirebaseAuth
                                               .instance.currentUser!.uid,
                                         );

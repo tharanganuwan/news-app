@@ -20,14 +20,16 @@ class CommentsScreen extends StatelessWidget {
         child: ListView(
           physics: BouncingScrollPhysics(),
           children: [
-            Hero(
-              tag: news.title!,
-              child: Image.network(
-                news.image!,
-                height: 250,
-                fit: BoxFit.cover,
-              ),
-            ),
+            (news.p_ispoll == "yes")
+                ? SizedBox()
+                : Hero(
+                    tag: news.title!,
+                    child: Image.network(
+                      news.image!,
+                      height: 250,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
             const SizedBox(
               height: 16,
             ),
@@ -36,13 +38,21 @@ class CommentsScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    news.title!,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                    ),
-                  ),
+                  (news.p_ispoll == "yes")
+                      ? Text(
+                          news.p_question!,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                          ),
+                        )
+                      : Text(
+                          news.title!,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                          ),
+                        ),
                   const SizedBox(
                     height: 16,
                   ),
