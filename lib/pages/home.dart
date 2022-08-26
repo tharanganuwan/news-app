@@ -97,16 +97,16 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) => DefaultTabController(
       length: 2,
       child: Scaffold(
-        floatingActionButton:
-            (FirebaseAuth.instance.currentUser?.email == 'sankha97@gmail.com' ||
-                    FirebaseAuth.instance.currentUser?.email ==
-                        "rocketnuwan30@gmail.com")
-                ? FloatingActionButton(
-                    child: const Icon(Icons.add),
-                    onPressed: () {
-                      ShowForm.showForm(context, null);
-                    })
-                : const SizedBox(),
+        floatingActionButton: (FirebaseAuth.instance.currentUser?.email ==
+                    'rocketnuwan30@gmail.com' ||
+                FirebaseAuth.instance.currentUser?.email ==
+                    "cybehawks@gmail.com")
+            ? FloatingActionButton(
+                child: const Icon(Icons.add),
+                onPressed: () {
+                  ShowForm.showForm(context, null);
+                })
+            : const SizedBox(),
         appBar: AppBar(
           leading: Padding(
             padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 10.0),

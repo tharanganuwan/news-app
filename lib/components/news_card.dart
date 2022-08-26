@@ -328,12 +328,23 @@ class _NewsCardState extends State<NewsCard> {
                                     DateTime.now().day,
                                   ))
                                   .inDays;
-
+                              late int voteId = 2;
                               return Container(
                                 //   color: Colors.red,
                                 //margin: const EdgeInsets.only(bottom: 20),
                                 child: FlutterPolls(
-                                  userVotedOptionId: 1,
+                                  votesTextStyle: TextStyle(
+                                    color: (isVoted())
+                                        ? Colors.grey
+                                        : const Color(0xff009A98),
+                                  ),
+                                  leadingVotedProgessColor: Colors.grey,
+                                  pollOptionsBorder: Border.all(
+                                    color: const Color(0xff009A98),
+                                  ),
+                                  pollOptionsHeight: 44,
+
+                                  userVotedOptionId: voteId,
                                   pollId: poll['id'].toString(),
                                   // hasVoted: hasVoted.value,
                                   // userVotedOptionId: userVotedOptionId.value,
@@ -346,6 +357,10 @@ class _NewsCardState extends State<NewsCard> {
                                           .add(AuthLoginEvent());
                                       return false;
                                     } else {
+                                      setState(() {
+                                        voteId =
+                                            int.parse(pollOption.id.toString());
+                                      });
                                       print(pollOption.id);
                                       value.addvote(
                                           FirebaseAuth
@@ -371,17 +386,40 @@ class _NewsCardState extends State<NewsCard> {
                                       ),
                                     ),
                                   ),
-
                                   pollOptions: List<PollOption>.from(
                                     poll['options'].map(
                                       (option) {
                                         var a = PollOption(
                                           id: option['id'],
-                                          title: Text(
-                                            option['title'],
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600,
+                                          title: Container(
+                                            height: 70,
+                                            width: (isVoted())
+                                                ? MediaQuery.of(context)
+                                                        .size
+                                                        .width -
+                                                    145
+                                                : MediaQuery.of(context)
+                                                        .size
+                                                        .width -
+                                                    70,
+                                            child: Align(
+                                              alignment: (isVoted())
+                                                  ? Alignment.centerLeft
+                                                  : Alignment.center,
+                                              child: Text(
+                                                option['title'],
+                                                // textAlign: (isVoted())
+                                                //     ? TextAlign.left
+                                                //     : TextAlign.center,
+                                                style: TextStyle(
+                                                  color: (isVoted())
+                                                      ? Colors.black
+                                                      : const Color(0xff009A98),
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                                overflow: TextOverflow.clip,
+                                              ),
                                             ),
                                           ),
                                           votes: option['votes'],
@@ -390,6 +428,7 @@ class _NewsCardState extends State<NewsCard> {
                                       },
                                     ),
                                   ),
+
                                   votedPercentageTextStyle: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
@@ -411,6 +450,8 @@ class _NewsCardState extends State<NewsCard> {
                                               days < 0
                                                   ? "ended"
                                                   : "ends $days days",
+                                              style:
+                                                  TextStyle(color: Colors.grey),
                                             ),
                                             // GestureDetector(
                                             //     onTap: () {
@@ -431,12 +472,12 @@ class _NewsCardState extends State<NewsCard> {
                                             SizedBox(width: 15),
                                             (FirebaseAuth.instance.currentUser
                                                             ?.email ==
-                                                        'sankha97@gmail.com' ||
+                                                        'rocketnuwan30@gmail.com' ||
                                                     FirebaseAuth
                                                             .instance
                                                             .currentUser
                                                             ?.email ==
-                                                        "rocketnuwan30@gmail.com")
+                                                        "cybehawks@gmail.com")
                                                 ? GestureDetector(
                                                     onTap: () {
                                                       value.undovote(
@@ -444,41 +485,64 @@ class _NewsCardState extends State<NewsCard> {
                                                               .currentUser!.uid,
                                                           widget.news.id
                                                               .toString());
-                                                      Navigator.of(context).push(
-                                                          MaterialPageRoute(
-                                                              builder:
-                                                                  (context) {
-                                                        return HomeScreen();
-                                                      }));
+                                                      Navigator.of(context)
+                                                          .push(
+                                                        MaterialPageRoute(
+                                                          builder: (context) {
+                                                            return HomeScreen();
+                                                          },
+                                                        ),
+                                                      );
                                                     },
-                                                    child: Text("Undo"))
+                                                    child: Text(
+                                                      "Undo",
+                                                      style: TextStyle(
+                                                        color: (!isVoted())
+                                                            ? Colors.grey
+                                                            : const Color(
+                                                                0xff009A98),
+                                                      ),
+                                                    ))
                                                 : SizedBox(),
                                             SizedBox(width: 15),
                                             (FirebaseAuth.instance.currentUser
                                                             ?.email ==
-                                                        'sankha97@gmail.com' ||
+                                                        'rocketnuwan30@gmail.com' ||
                                                     FirebaseAuth
                                                             .instance
                                                             .currentUser
                                                             ?.email ==
-                                                        "rocketnuwan30@gmail.com")
+                                                        "cybehawks@gmail.com")
                                                 ? GestureDetector(
                                                     onTap: () {
                                                       value.deleteNews(widget
                                                           .news.id
                                                           .toString());
+                                                      Navigator.of(context)
+                                                          .push(
+                                                        MaterialPageRoute(
+                                                          builder: (context) {
+                                                            return HomeScreen();
+                                                          },
+                                                        ),
+                                                      );
                                                     },
-                                                    child: Text("Delete"))
+                                                    child: Text(
+                                                      "Delete",
+                                                      style: TextStyle(
+                                                          color: const Color(
+                                                              0xff009A98)),
+                                                    ))
                                                 : SizedBox(),
                                             SizedBox(width: 15),
                                             (FirebaseAuth.instance.currentUser
                                                             ?.email ==
-                                                        'sankha97@gmail.com' ||
+                                                        'rocketnuwan30@gmail.com' ||
                                                     FirebaseAuth
                                                             .instance
                                                             .currentUser
                                                             ?.email ==
-                                                        "rocketnuwan30@gmail.com")
+                                                        "cybehawks@gmail.com")
                                                 ? GestureDetector(
                                                     onTap: () {
                                                       Navigator.of(context)
@@ -490,7 +554,12 @@ class _NewsCardState extends State<NewsCard> {
                                                                         .news)),
                                                       );
                                                     },
-                                                    child: Text("Edit"))
+                                                    child: Text(
+                                                      "Edit",
+                                                      style: TextStyle(
+                                                          color: const Color(
+                                                              0xff009A98)),
+                                                    ))
                                                 : SizedBox(),
                                           ],
                                         ),

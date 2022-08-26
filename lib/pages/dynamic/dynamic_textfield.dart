@@ -1,6 +1,7 @@
 import 'package:cybehawks/components/primary_button.dart';
 import 'package:cybehawks/controller/post_controller.dart';
 import 'package:cybehawks/models/news.dart';
+import 'package:cybehawks/pages/home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -311,7 +312,13 @@ class _SingleListUseState extends State<SingleListUse> {
                                     value.setAnswers();
                                     value.postPoll();
                                     Future.delayed(Duration(seconds: 2), () {
-                                      Navigator.of(context).pop();
+                                      // Navigator.of(context).pop();
+
+                                      Navigator.pushReplacement(context,
+                                          MaterialPageRoute(builder: (context) {
+                                        return HomeScreen();
+                                      }));
+
                                       value.clearColnrollers();
                                       setState(() {
                                         value.setLording(false);
