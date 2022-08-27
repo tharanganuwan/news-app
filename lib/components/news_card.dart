@@ -25,16 +25,15 @@ class NewsCard extends StatefulWidget {
 
 class _NewsCardState extends State<NewsCard> {
   Widget build(BuildContext context) {
-    List<String>? answer1_votes = widget.news.answer1_votes;
-    List<String>? answer2_votes = widget.news.answer2_votes;
-    List<String>? answer3_votes = widget.news.answer1_votes;
-    List<String>? answer4_votes = widget.news.answer1_votes;
-    List<String>? answer5_votes = widget.news.answer1_votes;
-    List<String>? answer6_votes = widget.news.answer1_votes;
-
-    bool isVoted() {
-      bool a = false;
+    bool isVoted(bool b) {
+      bool a = b;
       if (FirebaseAuth.instance.currentUser != null) {
+        List<String>? answer1_votes = widget.news.answer1_votes;
+        List<String>? answer2_votes = widget.news.answer2_votes;
+        List<String>? answer3_votes = widget.news.answer3_votes;
+        List<String>? answer4_votes = widget.news.answer4_votes;
+        List<String>? answer5_votes = widget.news.answer5_votes;
+        List<String>? answer6_votes = widget.news.answer6_votes;
         String uid = FirebaseAuth.instance.currentUser!.uid;
 
         if (answer1_votes!.contains(uid) ||
@@ -44,10 +43,8 @@ class _NewsCardState extends State<NewsCard> {
             answer5_votes!.contains(uid) ||
             answer6_votes!.contains(uid)) {
           a = true;
-          print("true");
         } else {
           a = false;
-          print('False');
         }
       }
       return a;
@@ -266,13 +263,13 @@ class _NewsCardState extends State<NewsCard> {
     if (ss == 2) {
       ss = 220;
     } else if (ss == 3) {
-      ss = 260;
+      ss = 270;
     } else if (ss == 4) {
-      ss = 310;
+      ss = 320;
     } else if (ss == 5) {
-      ss = 360;
+      ss = 370;
     } else if (ss == 6) {
-      ss = 400;
+      ss = 420;
     }
 
     return (widget.news.p_ispoll == "yes" || widget.news.p_ispoll == null)
@@ -333,8 +330,10 @@ class _NewsCardState extends State<NewsCard> {
                                 //   color: Colors.red,
                                 //margin: const EdgeInsets.only(bottom: 20),
                                 child: FlutterPolls(
+                                  //votedBackgroundColor: Colors.red,
+                                  //votedProgressColor: Colors.amber,
                                   votesTextStyle: TextStyle(
-                                    color: (isVoted())
+                                    color: (isVoted(true))
                                         ? Colors.grey
                                         : const Color(0xff009A98),
                                   ),
@@ -367,6 +366,7 @@ class _NewsCardState extends State<NewsCard> {
                                               .instance.currentUser!.uid,
                                           widget.news.id!,
                                           pollOption.id!);
+                                      isVoted(false);
                                       await Future.delayed(
                                           const Duration(seconds: 2));
 
@@ -375,7 +375,7 @@ class _NewsCardState extends State<NewsCard> {
                                     }
                                   },
                                   pollEnded: days < 0,
-                                  hasVoted: isVoted(),
+                                  hasVoted: isVoted(false),
                                   pollTitle: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
@@ -393,17 +393,12 @@ class _NewsCardState extends State<NewsCard> {
                                           id: option['id'],
                                           title: Container(
                                             height: 70,
-                                            width: (isVoted())
-                                                ? MediaQuery.of(context)
-                                                        .size
-                                                        .width -
-                                                    145
-                                                : MediaQuery.of(context)
-                                                        .size
-                                                        .width -
-                                                    70,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width -
+                                                150,
                                             child: Align(
-                                              alignment: (isVoted())
+                                              alignment: (isVoted(false))
                                                   ? Alignment.centerLeft
                                                   : Alignment.center,
                                               child: Text(
@@ -412,7 +407,7 @@ class _NewsCardState extends State<NewsCard> {
                                                 //     ? TextAlign.left
                                                 //     : TextAlign.center,
                                                 style: TextStyle(
-                                                  color: (isVoted())
+                                                  color: (isVoted(false))
                                                       ? Colors.black
                                                       : const Color(0xff009A98),
                                                   fontSize: 12,
@@ -472,7 +467,7 @@ class _NewsCardState extends State<NewsCard> {
                                             SizedBox(width: 15),
                                             (FirebaseAuth.instance.currentUser
                                                             ?.email ==
-                                                        'rocketnuwan30@gmail.com' ||
+                                                        'cybehawksa@gmail.com' ||
                                                     FirebaseAuth
                                                             .instance
                                                             .currentUser
@@ -489,6 +484,7 @@ class _NewsCardState extends State<NewsCard> {
                                                           .push(
                                                         MaterialPageRoute(
                                                           builder: (context) {
+                                                            isVoted(false);
                                                             return HomeScreen();
                                                           },
                                                         ),
@@ -497,7 +493,7 @@ class _NewsCardState extends State<NewsCard> {
                                                     child: Text(
                                                       "Undo",
                                                       style: TextStyle(
-                                                        color: (!isVoted())
+                                                        color: (!isVoted(false))
                                                             ? Colors.grey
                                                             : const Color(
                                                                 0xff009A98),
@@ -507,7 +503,7 @@ class _NewsCardState extends State<NewsCard> {
                                             SizedBox(width: 15),
                                             (FirebaseAuth.instance.currentUser
                                                             ?.email ==
-                                                        'rocketnuwan30@gmail.com' ||
+                                                        'cybehawksa@gmail.com' ||
                                                     FirebaseAuth
                                                             .instance
                                                             .currentUser
@@ -537,7 +533,7 @@ class _NewsCardState extends State<NewsCard> {
                                             SizedBox(width: 15),
                                             (FirebaseAuth.instance.currentUser
                                                             ?.email ==
-                                                        'rocketnuwan30@gmail.com' ||
+                                                        'cybehawksa@gmail.com' ||
                                                     FirebaseAuth
                                                             .instance
                                                             .currentUser

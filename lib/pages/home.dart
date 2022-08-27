@@ -98,7 +98,7 @@ class _HomeState extends State<Home> {
       length: 2,
       child: Scaffold(
         floatingActionButton: (FirebaseAuth.instance.currentUser?.email ==
-                    'rocketnuwan30@gmail.com' ||
+                    'cybehawksa@gmail.com' ||
                 FirebaseAuth.instance.currentUser?.email ==
                     "cybehawks@gmail.com")
             ? FloatingActionButton(

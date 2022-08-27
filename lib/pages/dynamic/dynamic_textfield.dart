@@ -88,7 +88,7 @@ class _SingleListUseState extends State<SingleListUse> {
                   ),
                   TextFormField(
                     controller: value.questionController,
-                    maxLength: 300,
+                    maxLength: 200,
                     maxLines: 3,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
@@ -148,6 +148,8 @@ class _SingleListUseState extends State<SingleListUse> {
                                     children: <Widget>[
                                       Expanded(
                                         child: TextFormField(
+                                          maxLength: 135,
+                                          maxLines: 3,
                                           controller:
                                               value.controllrs[position],
                                           // initialValue: _studentMap[position].name.length != 0
