@@ -467,7 +467,7 @@ class _NewsCardState extends State<NewsCard> {
                                             SizedBox(width: 15),
                                             (FirebaseAuth.instance.currentUser
                                                             ?.email ==
-                                                        'cybehawksa@gmail.com' ||
+                                                        'rocketnuwan30@gmail.com' ||
                                                     FirebaseAuth
                                                             .instance
                                                             .currentUser
@@ -503,7 +503,7 @@ class _NewsCardState extends State<NewsCard> {
                                             SizedBox(width: 15),
                                             (FirebaseAuth.instance.currentUser
                                                             ?.email ==
-                                                        'cybehawksa@gmail.com' ||
+                                                        'rocketnuwan30@gmail.com' ||
                                                     FirebaseAuth
                                                             .instance
                                                             .currentUser
@@ -533,7 +533,7 @@ class _NewsCardState extends State<NewsCard> {
                                             SizedBox(width: 15),
                                             (FirebaseAuth.instance.currentUser
                                                             ?.email ==
-                                                        'cybehawksa@gmail.com' ||
+                                                        'rocketnuwan30@gmail.com' ||
                                                     FirebaseAuth
                                                             .instance
                                                             .currentUser
