@@ -345,6 +345,7 @@ class _NewsCardState extends State<NewsCard> {
 
                                   userVotedOptionId: voteId,
                                   pollId: poll['id'].toString(),
+                                  // new x
                                   // hasVoted: hasVoted.value,
                                   // userVotedOptionId: userVotedOptionId.value,
                                   onVoted: (PollOption pollOption,
